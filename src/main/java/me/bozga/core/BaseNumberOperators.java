@@ -74,8 +74,8 @@ public class BaseNumberOperators {
         int subtractions;
         BaseNumber largerNumber;
         BaseNumber smallerNumber;
-        if (a.getValue().size() > b.getValue().size()) {
-            b.addDigitAt(a.getValue().size() - 1, '0'); // fill b with 0s
+        if (a.compare(b) > 0) {
+            if (b.getValue().size() != a.getValue().size()) { b.addDigitAt(a.getValue().size() - 1, '0'); }
             subtractions = b.getValue().size();
             largerNumber = a; smallerNumber = b;
         } else {

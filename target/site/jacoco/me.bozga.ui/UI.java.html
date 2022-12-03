@@ -18,124 +18,175 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
 import me.bozga.core.BaseNumber;
+import me.bozga.core.BaseNumberConverter;
 import me.bozga.core.BaseNumberOperators;
 
-<span class="nc" id="L23">public class UI {</span>
+<span class="nc" id="L24">public class UI {</span>
 
     private static JFrame frame;
 
     private static JTextField resultNumberField;
     private static JLabel arithmeticErrorLabel;
 
+    private static JTextField baseSecondNumberField;
     private static JLabel baseConversionErrorLabel;
 
     /**
      * Initializes the main window.
      */
     public static void initialize() {
-<span class="nc" id="L36">        frame = new JFrame(&quot;Bases Calculator&quot;);</span>
-<span class="nc" id="L37">        frame.setSize(640, 480);</span>
-<span class="nc" id="L38">        frame.setResizable(false);</span>
-<span class="nc" id="L39">        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);</span>
+<span class="nc" id="L38">        frame = new JFrame(&quot;Bases Calculator&quot;);</span>
+<span class="nc" id="L39">        frame.setSize(640, 360);</span>
+<span class="nc" id="L40">        frame.setResizable(false);</span>
+<span class="nc" id="L41">        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);</span>
 
-<span class="nc" id="L41">        JTabbedPane pane = new JTabbedPane();</span>
-<span class="nc" id="L42">        pane.setForeground(Color.black);</span>
+<span class="nc" id="L43">        JTabbedPane pane = new JTabbedPane();</span>
+<span class="nc" id="L44">        pane.setForeground(Color.black);</span>
 
         /*
          * Arithmetic operations panel
          */
-<span class="nc" id="L47">        JPanel arithmeticOperationsPanel = new JPanel();</span>
-<span class="nc" id="L48">        arithmeticOperationsPanel.setLayout(new BoxLayout(arithmeticOperationsPanel, BoxLayout.Y_AXIS));</span>
-<span class="nc" id="L49">        pane.addTab(&quot;Arithmetic Operations&quot;, null, arithmeticOperationsPanel, &quot;Perform arithmetic operations.&quot;);</span>
+<span class="nc" id="L49">        JPanel arithmeticOperationsPanel = new JPanel();</span>
+<span class="nc" id="L50">        arithmeticOperationsPanel.setLayout(new BoxLayout(arithmeticOperationsPanel, BoxLayout.Y_AXIS));</span>
+<span class="nc" id="L51">        pane.addTab(&quot;Arithmetic Operations&quot;, null, arithmeticOperationsPanel, &quot;Perform arithmetic operations.&quot;);</span>
         
         // settings panel
-<span class="nc" id="L52">        JPanel arithmeticSettings = new JPanel();</span>
-<span class="nc" id="L53">        arithmeticSettings.setBorder(BorderFactory.createTitledBorder(&quot;Settings&quot;));</span>
-<span class="nc" id="L54">        arithmeticSettings.setMaximumSize(new Dimension(640, 300));</span>
-<span class="nc" id="L55">        arithmeticOperationsPanel.add(arithmeticSettings);</span>
+<span class="nc" id="L54">        JPanel arithmeticSettings = new JPanel();</span>
+<span class="nc" id="L55">        arithmeticSettings.setBorder(BorderFactory.createTitledBorder(&quot;Settings&quot;));</span>
+<span class="nc" id="L56">        arithmeticSettings.setMaximumSize(new Dimension(640, 300));</span>
+<span class="nc" id="L57">        arithmeticOperationsPanel.add(arithmeticSettings);</span>
 
-<span class="nc" id="L57">        JLabel operationLabel = new JLabel(&quot;Operation&quot;);</span>
-<span class="nc" id="L58">        String[] allowedOperations = { &quot;Addition&quot;, &quot;Subtraction&quot;, &quot;Multiplication by 1 digit&quot;, &quot;Division by 1 digit&quot; };</span>
-<span class="nc" id="L59">        JComboBox&lt;String&gt; operationComboBox = new JComboBox&lt;&gt;(allowedOperations);</span>
-<span class="nc" id="L60">        arithmeticSettings.add(operationLabel);</span>
-<span class="nc" id="L61">        arithmeticSettings.add(operationComboBox);</span>
+<span class="nc" id="L59">        JLabel operationLabel = new JLabel(&quot;Operation&quot;);</span>
+<span class="nc" id="L60">        String[] allowedOperations = { &quot;Addition&quot;, &quot;Subtraction&quot;, &quot;Multiplication by 1 digit&quot;, &quot;Division by 1 digit&quot; };</span>
+<span class="nc" id="L61">        JComboBox&lt;String&gt; operationComboBox = new JComboBox&lt;&gt;(allowedOperations);</span>
+<span class="nc" id="L62">        arithmeticSettings.add(operationLabel);</span>
+<span class="nc" id="L63">        arithmeticSettings.add(operationComboBox);</span>
 
-<span class="nc" id="L63">        JLabel baseLabel = new JLabel(&quot;Base&quot;);</span>
-<span class="nc" id="L64">        Byte[] allowedBases = { 2, 3, 4, 5, 6, 7, 8, 9, 10, 16 };</span>
-<span class="nc" id="L65">        JComboBox&lt;Byte&gt; baseComboBox = new JComboBox&lt;&gt;(allowedBases);</span>
-<span class="nc" id="L66">        baseComboBox.setSelectedIndex(8);</span>
-<span class="nc" id="L67">        arithmeticSettings.add(baseLabel);</span>
-<span class="nc" id="L68">        arithmeticSettings.add(baseComboBox);</span>
+<span class="nc" id="L65">        JLabel baseLabel = new JLabel(&quot;Base&quot;);</span>
+<span class="nc" id="L66">        Byte[] allowedBases = { 2, 3, 4, 5, 6, 7, 8, 9, 10, 16 };</span>
+<span class="nc" id="L67">        JComboBox&lt;Byte&gt; baseComboBox = new JComboBox&lt;&gt;(allowedBases);</span>
+<span class="nc" id="L68">        baseComboBox.setSelectedIndex(8);</span>
+<span class="nc" id="L69">        arithmeticSettings.add(baseLabel);</span>
+<span class="nc" id="L70">        arithmeticSettings.add(baseComboBox);</span>
 
         // perform panel
-<span class="nc" id="L71">        JPanel arithmeticPerform = new JPanel();</span>
-<span class="nc" id="L72">        arithmeticPerform.setLayout(new BoxLayout(arithmeticPerform, BoxLayout.Y_AXIS));</span>
-<span class="nc" id="L73">        arithmeticPerform.setBorder(BorderFactory.createTitledBorder(&quot;Perform&quot;));</span>
-<span class="nc" id="L74">        arithmeticOperationsPanel.add(arithmeticPerform);</span>
+<span class="nc" id="L73">        JPanel arithmeticPerform = new JPanel();</span>
+<span class="nc" id="L74">        arithmeticPerform.setLayout(new BoxLayout(arithmeticPerform, BoxLayout.Y_AXIS));</span>
+<span class="nc" id="L75">        arithmeticPerform.setBorder(BorderFactory.createTitledBorder(&quot;Perform&quot;));</span>
+<span class="nc" id="L76">        arithmeticOperationsPanel.add(arithmeticPerform);</span>
 
-<span class="nc" id="L76">        /* separator */ arithmeticPerform.add(Box.createVerticalGlue());</span>
+<span class="nc" id="L78">        /* separator */ arithmeticPerform.add(Box.createVerticalGlue());</span>
 
-<span class="nc" id="L78">        JPanel firstNumberPanel = new JPanel();</span>
-<span class="nc" id="L79">        firstNumberPanel.setMaximumSize(new Dimension(640, 150));</span>
-<span class="nc" id="L80">        JLabel firstNumberLabel = new JLabel(&quot;A = &quot;);</span>
-<span class="nc" id="L81">        JTextField firstNumberField = new JTextField(16);</span>
-<span class="nc" id="L82">        firstNumberPanel.add(firstNumberLabel);</span>
-<span class="nc" id="L83">        firstNumberPanel.add(firstNumberField);</span>
-<span class="nc" id="L84">        arithmeticPerform.add(firstNumberPanel);</span>
+<span class="nc" id="L80">        JPanel firstNumberPanel = new JPanel();</span>
+<span class="nc" id="L81">        firstNumberPanel.setMaximumSize(new Dimension(640, 150));</span>
+<span class="nc" id="L82">        JLabel firstNumberLabel = new JLabel(&quot;A = &quot;);</span>
+<span class="nc" id="L83">        JTextField firstNumberField = new JTextField(16);</span>
+<span class="nc" id="L84">        firstNumberPanel.add(firstNumberLabel);</span>
+<span class="nc" id="L85">        firstNumberPanel.add(firstNumberField);</span>
+<span class="nc" id="L86">        arithmeticPerform.add(firstNumberPanel);</span>
 
-<span class="nc" id="L86">        JPanel secondNumberPanel = new JPanel();</span>
-<span class="nc" id="L87">        secondNumberPanel.setMaximumSize(new Dimension(640, 150));</span>
-<span class="nc" id="L88">        JLabel secondNumberLabel = new JLabel(&quot;B = &quot;);</span>
-<span class="nc" id="L89">        JTextField secondNumberField = new JTextField(16);</span>
-<span class="nc" id="L90">        secondNumberPanel.add(secondNumberLabel);</span>
-<span class="nc" id="L91">        secondNumberPanel.add(secondNumberField);</span>
-<span class="nc" id="L92">        arithmeticPerform.add(secondNumberPanel);</span>
+<span class="nc" id="L88">        JPanel secondNumberPanel = new JPanel();</span>
+<span class="nc" id="L89">        secondNumberPanel.setMaximumSize(new Dimension(640, 150));</span>
+<span class="nc" id="L90">        JLabel secondNumberLabel = new JLabel(&quot;B = &quot;);</span>
+<span class="nc" id="L91">        JTextField secondNumberField = new JTextField(16);</span>
+<span class="nc" id="L92">        secondNumberPanel.add(secondNumberLabel);</span>
+<span class="nc" id="L93">        secondNumberPanel.add(secondNumberField);</span>
+<span class="nc" id="L94">        arithmeticPerform.add(secondNumberPanel);</span>
 
-<span class="nc" id="L94">        /* separator */ arithmeticPerform.add(Box.createVerticalGlue());</span>
+<span class="nc" id="L96">        /* separator */ arithmeticPerform.add(Box.createVerticalGlue());</span>
 
-<span class="nc" id="L96">        JPanel arithmeticCalculatePanel = new JPanel();</span>
-<span class="nc" id="L97">        arithmeticCalculatePanel.setMaximumSize(new Dimension(640, 150));</span>
-<span class="nc" id="L98">        JButton arithmeticCalculate = new JButton(&quot;Calculate&quot;);</span>
-<span class="nc" id="L99">        arithmeticCalculate.addActionListener(new ActionListener() {</span>
+<span class="nc" id="L98">        JPanel arithmeticCalculatePanel = new JPanel();</span>
+<span class="nc" id="L99">        arithmeticCalculatePanel.setMaximumSize(new Dimension(640, 150));</span>
+<span class="nc" id="L100">        JButton arithmeticCalculate = new JButton(&quot;Calculate&quot;);</span>
+<span class="nc" id="L101">        arithmeticCalculate.addActionListener(new ActionListener() {</span>
             @Override public void actionPerformed(ActionEvent e) { 
-<span class="nc" id="L101">                calculateAction(operationComboBox, baseComboBox, firstNumberField, secondNumberField); </span>
-<span class="nc" id="L102">            }</span>
+<span class="nc" id="L103">                arithmeticCalculateAction(operationComboBox, baseComboBox, firstNumberField, secondNumberField); </span>
+<span class="nc" id="L104">            }</span>
         });
-<span class="nc" id="L104">        arithmeticCalculatePanel.add(arithmeticCalculate);</span>
-<span class="nc" id="L105">        arithmeticPerform.add(arithmeticCalculatePanel);</span>
+<span class="nc" id="L106">        arithmeticCalculatePanel.add(arithmeticCalculate);</span>
+<span class="nc" id="L107">        arithmeticPerform.add(arithmeticCalculatePanel);</span>
 
-<span class="nc" id="L107">        JPanel resultNumberPanel = new JPanel();</span>
-<span class="nc" id="L108">        resultNumberPanel.setMaximumSize(new Dimension(640, 150));</span>
-<span class="nc" id="L109">        JLabel resultNumberLabel = new JLabel(&quot;Result&quot;);</span>
-<span class="nc" id="L110">        resultNumberField = new JTextField(16);</span>
-<span class="nc" id="L111">        resultNumberField.setEditable(false);</span>
-<span class="nc" id="L112">        resultNumberPanel.add(resultNumberLabel);</span>
-<span class="nc" id="L113">        resultNumberPanel.add(resultNumberField);</span>
-<span class="nc" id="L114">        arithmeticPerform.add(resultNumberPanel);</span>
+<span class="nc" id="L109">        JPanel resultNumberPanel = new JPanel();</span>
+<span class="nc" id="L110">        resultNumberPanel.setMaximumSize(new Dimension(640, 150));</span>
+<span class="nc" id="L111">        JLabel resultNumberLabel = new JLabel(&quot;Result&quot;);</span>
+<span class="nc" id="L112">        resultNumberField = new JTextField(16);</span>
+<span class="nc" id="L113">        resultNumberField.setEditable(false);</span>
+<span class="nc" id="L114">        resultNumberPanel.add(resultNumberLabel);</span>
+<span class="nc" id="L115">        resultNumberPanel.add(resultNumberField);</span>
+<span class="nc" id="L116">        arithmeticPerform.add(resultNumberPanel);</span>
 
-<span class="nc" id="L116">        JPanel arithmeticErrorPanel = new JPanel();</span>
-<span class="nc" id="L117">        arithmeticErrorPanel.setMaximumSize(new Dimension(640, 150));</span>
-<span class="nc" id="L118">        arithmeticErrorLabel = new JLabel(&quot;&quot;);</span>
-<span class="nc" id="L119">        arithmeticErrorPanel.add(arithmeticErrorLabel);</span>
-<span class="nc" id="L120">        arithmeticPerform.add(arithmeticErrorPanel);</span>
+<span class="nc" id="L118">        JPanel arithmeticErrorPanel = new JPanel();</span>
+<span class="nc" id="L119">        arithmeticErrorPanel.setMaximumSize(new Dimension(640, 150));</span>
+<span class="nc" id="L120">        arithmeticErrorLabel = new JLabel(&quot;&quot;);</span>
+<span class="nc" id="L121">        arithmeticErrorPanel.add(arithmeticErrorLabel);</span>
+<span class="nc" id="L122">        arithmeticPerform.add(arithmeticErrorPanel);</span>
 
-<span class="nc" id="L122">        /* separator */ arithmeticPerform.add(Box.createVerticalGlue());</span>
+<span class="nc" id="L124">        /* separator */ arithmeticPerform.add(Box.createVerticalGlue());</span>
 
         /*
          * Base conversion panel
          */
-<span class="nc" id="L127">        JPanel baseConversionPanel = new JPanel();</span>
-<span class="nc" id="L128">        pane.addTab(&quot;Base Conversion&quot;, null, baseConversionPanel, &quot;Perform base conversions.&quot;);</span>
+<span class="nc" id="L129">        JPanel baseConversionPanel = new JPanel();</span>
+<span class="nc" id="L130">        baseConversionPanel.setLayout(new BoxLayout(baseConversionPanel, BoxLayout.Y_AXIS));</span>
+<span class="nc" id="L131">        pane.addTab(&quot;Base Conversion&quot;, null, baseConversionPanel, &quot;Perform base conversions.&quot;);</span>
 
-<span class="nc" id="L130">        frame.add(pane);</span>
-<span class="nc" id="L131">        frame.setVisible(true);</span>
-<span class="nc" id="L132">    }</span>
+<span class="nc" id="L133">        /* separator */ baseConversionPanel.add(Box.createVerticalGlue());</span>
+
+        // first number stuff
+<span class="nc" id="L136">        JPanel baseFirstNumberPanel = new JPanel();</span>
+<span class="nc" id="L137">        baseFirstNumberPanel.setMaximumSize(new Dimension(480, 150));</span>
+<span class="nc" id="L138">        baseFirstNumberPanel.setBorder(BorderFactory.createTitledBorder(&quot;Initial Number&quot;));</span>
+<span class="nc" id="L139">        JLabel baseFirstNumberLabel = new JLabel(&quot;A =&quot;);</span>
+<span class="nc" id="L140">        JTextField baseFirstNumberField = new JTextField(16);</span>
+<span class="nc" id="L141">        JLabel baseFirstBaseLabel = new JLabel(&quot;in base&quot;);</span>
+<span class="nc" id="L142">        JComboBox&lt;Byte&gt; baseFirstBaseComboBox = new JComboBox&lt;&gt;(allowedBases);</span>
+<span class="nc" id="L143">        baseFirstNumberPanel.add(baseFirstNumberLabel);</span>
+<span class="nc" id="L144">        baseFirstNumberPanel.add(baseFirstNumberField);</span>
+<span class="nc" id="L145">        baseFirstNumberPanel.add(baseFirstBaseLabel);</span>
+<span class="nc" id="L146">        baseFirstNumberPanel.add(baseFirstBaseComboBox);</span>
+<span class="nc" id="L147">        baseConversionPanel.add(baseFirstNumberPanel);</span>
+
+        // second number stuff
+<span class="nc" id="L150">        JPanel baseSecondNumberPanel = new JPanel();</span>
+<span class="nc" id="L151">        baseSecondNumberPanel.setMaximumSize(new Dimension(480, 150));</span>
+<span class="nc" id="L152">        baseSecondNumberPanel.setBorder(BorderFactory.createTitledBorder(&quot;Result Number&quot;));</span>
+<span class="nc" id="L153">        JLabel baseSecondBaseLabel = new JLabel(&quot;A in base&quot;);</span>
+<span class="nc" id="L154">        JComboBox&lt;Byte&gt; baseSecondBaseComboBox = new JComboBox&lt;&gt;(allowedBases);</span>
+<span class="nc" id="L155">        JLabel baseSecondNumberLabel = new JLabel(&quot;gives A' = &quot;);</span>
+<span class="nc" id="L156">        baseSecondNumberField = new JTextField(8);</span>
+<span class="nc" id="L157">        JButton baseCalculate = new JButton(&quot;Calculate&quot;);</span>
+<span class="nc" id="L158">        baseCalculate.addActionListener(new ActionListener() {</span>
+            @Override public void actionPerformed(ActionEvent e) { 
+<span class="nc" id="L160">                baseCalculateAction(baseFirstNumberField, baseFirstBaseComboBox, baseSecondBaseComboBox); </span>
+<span class="nc" id="L161">            }</span>
+        });
+<span class="nc" id="L163">        baseSecondNumberField.setEditable(false);</span>
+<span class="nc" id="L164">        baseSecondNumberPanel.add(baseSecondBaseLabel);</span>
+<span class="nc" id="L165">        baseSecondNumberPanel.add(baseSecondBaseComboBox);</span>
+<span class="nc" id="L166">        baseSecondNumberPanel.add(baseSecondNumberLabel);</span>
+<span class="nc" id="L167">        baseSecondNumberPanel.add(baseSecondNumberField);</span>
+<span class="nc" id="L168">        baseSecondNumberPanel.add(baseCalculate);</span>
+<span class="nc" id="L169">        baseConversionPanel.add(baseSecondNumberPanel);</span>
+
+<span class="nc" id="L171">        /* separator */ baseConversionPanel.add(Box.createVerticalGlue());</span>
+
+<span class="nc" id="L173">        JPanel baseConversionErrorPanel = new JPanel();</span>
+<span class="nc" id="L174">        baseConversionErrorPanel.setMaximumSize(new Dimension(640, 150));</span>
+<span class="nc" id="L175">        baseConversionErrorLabel = new JLabel(&quot;&quot;);</span>
+<span class="nc" id="L176">        baseConversionErrorPanel.add(baseConversionErrorLabel);</span>
+<span class="nc" id="L177">        baseConversionPanel.add(baseConversionErrorPanel);</span>
+
+<span class="nc" id="L179">        /* separator */ baseConversionPanel.add(Box.createVerticalGlue());</span>
+
+<span class="nc" id="L181">        frame.add(pane);</span>
+<span class="nc" id="L182">        frame.setVisible(true);</span>
+<span class="nc" id="L183">    }</span>
 
     /*
      * FUNCTIONALITY OF BUTTONS AND SUCH
      */
     
-    private static void calculateAction(JComboBox&lt;String&gt; operationComboBox, 
+    private static void arithmeticCalculateAction(JComboBox&lt;String&gt; operationComboBox, 
                                     JComboBox&lt;Byte&gt; baseComboBox, 
                                     JTextField firstNumberField, 
                                     JTextField secondNumberField) 
@@ -143,36 +194,77 @@ import me.bozga.core.BaseNumberOperators;
         // validate input
         try {
 
-<span class="nc" id="L146">            Map&lt;Character, Integer&gt; additionalValueMapping = BaseNumber.NO_MAP;</span>
-<span class="nc bnc" id="L147" title="All 2 branches missed.">            if (baseComboBox.getSelectedIndex() == 9) { additionalValueMapping = BaseNumber.BASE_16_MAP; }</span>
+<span class="nc" id="L197">            Map&lt;Character, Integer&gt; additionalValueMapping = BaseNumber.NO_MAP;</span>
+<span class="nc bnc" id="L198" title="All 2 branches missed.">            if (baseComboBox.getSelectedIndex() == 9) { additionalValueMapping = BaseNumber.BASE_16_MAP; }</span>
 
-<span class="nc" id="L149">            byte base = (byte) baseComboBox.getSelectedItem();</span>
-<span class="nc" id="L150">            int operation = operationComboBox.getSelectedIndex(); // 0 = ADD, 1 = SUB, 2 = MUL, 3 = DIV</span>
+<span class="nc" id="L200">            byte base = (byte) baseComboBox.getSelectedItem();</span>
+<span class="nc" id="L201">            int operation = operationComboBox.getSelectedIndex(); // 0 = ADD, 1 = SUB, 2 = MUL, 3 = DIV</span>
 
-<span class="nc" id="L152">            BaseNumber a = new BaseNumber(base, firstNumberField.getText(), additionalValueMapping);</span>
-<span class="nc" id="L153">            BaseNumber b = new BaseNumber(base, secondNumberField.getText(), additionalValueMapping);</span>
+<span class="nc" id="L203">            BaseNumber a = new BaseNumber(base, false, firstNumberField.getText(), additionalValueMapping);</span>
+<span class="nc" id="L204">            BaseNumber b = new BaseNumber(base, false, secondNumberField.getText(), additionalValueMapping);</span>
 
-<span class="nc bnc" id="L155" title="All 4 branches missed.">            switch (operation) {</span>
+<span class="nc bnc" id="L206" title="All 5 branches missed.">            switch (operation) {</span>
                 case 0:
-<span class="nc" id="L157">                    resultNumberField.setText(BaseNumberOperators.add(a, b).toString());</span>
-<span class="nc" id="L158">                    break;</span>
+<span class="nc" id="L208">                    resultNumberField.setText(BaseNumberOperators.add(a, b).toString());</span>
+<span class="nc" id="L209">                    break;</span>
                 case 1:
-                    // resultNumberField.setText(BaseNumberOperators.sub(a, b).toString());
-<span class="nc" id="L161">                    break;</span>
+<span class="nc" id="L211">                    resultNumberField.setText(BaseNumberOperators.sub(a, b).toString());</span>
+<span class="nc" id="L212">                    break;</span>
                 case 2:
-                    // resultNumberField.setText(BaseNumberOperators.mulDigit(a, b).toString());
-<span class="nc" id="L164">                    break;</span>
+<span class="nc" id="L214">                    resultNumberField.setText(BaseNumberOperators.mulDigit(a, b).toString());</span>
+<span class="nc" id="L215">                    break;</span>
                 case 3:
-                    // resultNumberField.setText(BaseNumberOperators.divDigit(a, b).toString());
+<span class="nc" id="L217">                    BaseNumber[] resultArray = BaseNumberOperators.divDigit(a, b);</span>
+<span class="nc" id="L218">                    resultNumberField.setText(resultArray[0].toString() + &quot;, remainder &quot; + resultArray[1].toString());</span>
                     break;
             }
 
-<span class="nc" id="L170">        } catch (Exception ex) {</span>
-<span class="nc" id="L171">            String message = ex.getMessage();</span>
-<span class="nc bnc" id="L172" title="All 2 branches missed.">            if (message.length() &gt; 128) { message = message.substring(0, 128) + &quot; [...]&quot;; }</span>
-<span class="nc" id="L173">            arithmeticErrorLabel.setText(message);</span>
-<span class="nc" id="L174">        }</span>
-<span class="nc" id="L175">    }</span>
+<span class="nc" id="L222">            arithmeticErrorLabel.setText(&quot;OK&quot;);</span>
+
+<span class="nc" id="L224">        } catch (Exception ex) {</span>
+<span class="nc" id="L225">            String message = ex.getMessage();</span>
+<span class="nc bnc" id="L226" title="All 2 branches missed.">            if (message.length() &gt; 128) { message = message.substring(0, 128) + &quot; [...]&quot;; }</span>
+<span class="nc" id="L227">            arithmeticErrorLabel.setText(message);</span>
+<span class="nc" id="L228">        }</span>
+<span class="nc" id="L229">    }</span>
+
+    private static void baseCalculateAction(JTextField baseFirstNumberField, 
+                                    JComboBox&lt;Byte&gt; baseFirstComboBox, 
+                                    JComboBox&lt;Byte&gt; baseSecondComboBox) 
+    {
+        // validate input
+        try {
+
+<span class="nc" id="L238">            byte firstBase = (byte) baseFirstComboBox.getSelectedItem();</span>
+<span class="nc" id="L239">            Map&lt;Character, Integer&gt; firstAdditionalValueMapping = BaseNumber.NO_MAP;</span>
+<span class="nc bnc" id="L240" title="All 2 branches missed.">            if (baseFirstComboBox.getSelectedIndex() == 9) { firstAdditionalValueMapping = BaseNumber.BASE_16_MAP; }</span>
+
+<span class="nc" id="L242">            byte secondBase = (byte) baseSecondComboBox.getSelectedItem();</span>
+<span class="nc" id="L243">            Map&lt;Character, Integer&gt; secondAdditionalValueMapping = BaseNumber.NO_MAP;</span>
+<span class="nc bnc" id="L244" title="All 2 branches missed.">            if (baseSecondComboBox.getSelectedIndex() == 9) { secondAdditionalValueMapping = BaseNumber.BASE_16_MAP; }</span>
+
+            
+<span class="nc" id="L247">            BaseNumber n = new BaseNumber(firstBase, false, baseFirstNumberField.getText(), firstAdditionalValueMapping);</span>
+<span class="nc" id="L248">            BaseNumber r = new BaseNumber(secondBase, false, &quot;0&quot;, secondAdditionalValueMapping);</span>
+
+<span class="nc bnc" id="L250" title="All 2 branches missed.">            if (firstBase == secondBase) { r = n; }</span>
+<span class="nc bnc" id="L251" title="All 2 branches missed.">            else if (firstBase &gt; secondBase) {</span>
+                // successive division
+<span class="nc" id="L253">                r = BaseNumberConverter.convertBySuccessiveDivisions(n, r);</span>
+            } else {
+                // substitution
+<span class="nc" id="L256">                r = BaseNumberConverter.convertBySubstitution(n, r);</span>
+            }
+
+<span class="nc" id="L259">            baseSecondNumberField.setText(r.toString()); </span>
+<span class="nc" id="L260">            baseConversionErrorLabel.setText(&quot;OK&quot;);</span>
+
+<span class="nc" id="L262">        } catch (Exception ex) {</span>
+<span class="nc" id="L263">            String message = ex.getMessage();</span>
+<span class="nc bnc" id="L264" title="All 2 branches missed.">            if (message.length() &gt; 128) { message = message.substring(0, 128) + &quot; [...]&quot;; }</span>
+<span class="nc" id="L265">            baseConversionErrorLabel.setText(message);</span>
+<span class="nc" id="L266">        }</span>
+<span class="nc" id="L267">    }</span>
     
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

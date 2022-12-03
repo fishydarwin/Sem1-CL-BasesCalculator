@@ -14,43 +14,48 @@ import java.util.stream.Stream;
 public class BaseNumber {
     
     private byte base;
+    private boolean negative;
     private List&lt;Character&gt; value;
     private Map&lt;Character, Integer&gt; additionalValueMapping;
 
-<span class="nc" id="L20">    public static final Map&lt;Character, Integer&gt; NO_MAP = new HashMap&lt;&gt;();</span>
-<span class="nc" id="L21">    public static final Map&lt;Character, Integer&gt; BASE_16_MAP = </span>
-<span class="nc" id="L22">        Stream.of(</span>
-<span class="nc" id="L23">        new AbstractMap.SimpleImmutableEntry&lt;&gt;('a', 10),    </span>
-<span class="nc" id="L24">        new AbstractMap.SimpleImmutableEntry&lt;&gt;('b', 11),    </span>
-<span class="nc" id="L25">        new AbstractMap.SimpleImmutableEntry&lt;&gt;('c', 12),    </span>
-<span class="nc" id="L26">        new AbstractMap.SimpleImmutableEntry&lt;&gt;('d', 13),    </span>
-<span class="nc" id="L27">        new AbstractMap.SimpleImmutableEntry&lt;&gt;('e', 14),    </span>
-<span class="nc" id="L28">        new AbstractMap.SimpleImmutableEntry&lt;&gt;('f', 15))</span>
-<span class="nc" id="L29">        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));</span>
+<span class="nc" id="L21">    public static final Map&lt;Character, Integer&gt; NO_MAP = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L22">    public static final Map&lt;Character, Integer&gt; BASE_16_MAP = </span>
+<span class="nc" id="L23">        Stream.of(</span>
+<span class="nc" id="L24">        new AbstractMap.SimpleImmutableEntry&lt;&gt;('a', 10),    </span>
+<span class="nc" id="L25">        new AbstractMap.SimpleImmutableEntry&lt;&gt;('b', 11),    </span>
+<span class="nc" id="L26">        new AbstractMap.SimpleImmutableEntry&lt;&gt;('c', 12),    </span>
+<span class="nc" id="L27">        new AbstractMap.SimpleImmutableEntry&lt;&gt;('d', 13),    </span>
+<span class="nc" id="L28">        new AbstractMap.SimpleImmutableEntry&lt;&gt;('e', 14),    </span>
+<span class="nc" id="L29">        new AbstractMap.SimpleImmutableEntry&lt;&gt;('f', 15))</span>
+<span class="nc" id="L30">        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));</span>
 
-<span class="nc" id="L31">    public BaseNumber(byte base, String value, Map&lt;Character, Integer&gt; additionalValueMapping) throws IllegalArgumentException {</span>
-<span class="nc" id="L32">        this.base = base;</span>
-<span class="nc" id="L33">        this.value = new ArrayList&lt;&gt;();</span>
-<span class="nc" id="L34">        this.additionalValueMapping = additionalValueMapping;</span>
-<span class="nc" id="L35">        value = value.toLowerCase();</span>
-<span class="nc bnc" id="L36" title="All 2 branches missed.">        for (int i = value.length() - 1; i &gt;= 0; i--) {</span>
-<span class="nc" id="L37">            char c = value.charAt(i);</span>
-<span class="nc bnc" id="L38" title="All 2 branches missed.">            if (!&quot;0123456789&quot;.contains(&quot;&quot; + c)) { // hack to check if already a digit</span>
-<span class="nc bnc" id="L39" title="All 2 branches missed.">                if (!additionalValueMapping.containsKey(c)) { // uh oh</span>
-<span class="nc" id="L40">                    throw new IllegalArgumentException(&quot;Provided invalid digit in base &quot; + base); </span>
-                }
-            } else {
-<span class="nc bnc" id="L43" title="All 2 branches missed.">                if (Integer.parseInt(&quot;&quot; + c) &gt;= base) {</span>
+    public BaseNumber(byte base, boolean negative, String value, Map&lt;Character, Integer&gt; additionalValueMapping) 
+                                                                                    throws IllegalArgumentException 
+<span class="nc" id="L34">        {</span>
+<span class="nc" id="L35">        this.base = base;</span>
+<span class="nc" id="L36">        this.negative = negative;</span>
+<span class="nc" id="L37">        this.value = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L38">        this.additionalValueMapping = additionalValueMapping;</span>
+<span class="nc" id="L39">        value = value.toLowerCase();</span>
+<span class="nc bnc" id="L40" title="All 2 branches missed.">        for (int i = value.length() - 1; i &gt;= 0; i--) {</span>
+<span class="nc" id="L41">            char c = value.charAt(i);</span>
+<span class="nc bnc" id="L42" title="All 2 branches missed.">            if (!&quot;0123456789&quot;.contains(&quot;&quot; + c)) { // hack to check if already a digit</span>
+<span class="nc bnc" id="L43" title="All 2 branches missed.">                if (!additionalValueMapping.containsKey(c)) { // uh oh</span>
 <span class="nc" id="L44">                    throw new IllegalArgumentException(&quot;Provided invalid digit in base &quot; + base); </span>
                 }
+            } else {
+<span class="nc bnc" id="L47" title="All 2 branches missed.">                if (Integer.parseInt(&quot;&quot; + c) &gt;= base) {</span>
+<span class="nc" id="L48">                    throw new IllegalArgumentException(&quot;Provided invalid digit in base &quot; + base); </span>
+                }
             }
-<span class="nc" id="L47">            this.value.add(c);</span>
+<span class="nc" id="L51">            this.value.add(c);</span>
         }
-<span class="nc" id="L49">    }</span>
+<span class="nc" id="L53">    }</span>
 
-<span class="nc" id="L51">    public byte getBase() { return base; }</span>
-<span class="nc" id="L52">    public List&lt;Character&gt; getValue() { return value; }</span>
-<span class="nc" id="L53">    public Map&lt;Character, Integer&gt; getAdditionalValueMapping() { return additionalValueMapping; }</span>
+<span class="nc" id="L55">    public byte getBase() { return base; }</span>
+<span class="nc" id="L56">    public boolean isNegative() { return negative; }</span>
+<span class="nc" id="L57">    public List&lt;Character&gt; getValue() { return value; }</span>
+<span class="nc" id="L58">    public Map&lt;Character, Integer&gt; getAdditionalValueMapping() { return additionalValueMapping; }</span>
 
     /**
      * Adds a digit at the specified position - if the position is greater, will fill with 0.
@@ -58,18 +63,25 @@ public class BaseNumber {
      * @param digitRepresentation the digit representation to add
      */
     public void addDigitAt(int index, char digitRepresentation) {
-<span class="nc bnc" id="L61" title="All 2 branches missed.">        while (index &gt;= value.size()) { value.add('0'); }</span>
-<span class="nc" id="L62">        value.set(index, digitRepresentation);</span>
-<span class="nc" id="L63">    }</span>
+<span class="nc bnc" id="L66" title="All 2 branches missed.">        while (index &gt;= value.size()) { value.add('0'); }</span>
+<span class="nc" id="L67">        value.set(index, digitRepresentation);</span>
+<span class="nc" id="L68">    }</span>
+
+    /**
+     * Removes the last digit - the last digit in this case means the first digit in base representation.
+     */
+    public void removeLastDigit() {
+<span class="nc" id="L74">        value.remove(value.size() - 1);</span>
+<span class="nc" id="L75">    }</span>
 
     /**
      * Gets the absolute value of a digit as base 10 number at index i.
      * @param index the index to get from
      * @return the value as a base 10 number
      */
-    public int digitValueAt(int index) {
-<span class="nc bnc" id="L71" title="All 2 branches missed.">        if (&quot;0123456789&quot;.contains(&quot;&quot; + value.get(index))) { return Integer.parseInt(&quot;&quot; + value.get(index)); }</span>
-<span class="nc" id="L72">        else { return additionalValueMapping.get(value.get(index)); }</span>
+    public final int digitValueAt(int index) {
+<span class="nc bnc" id="L83" title="All 2 branches missed.">        if (&quot;0123456789&quot;.contains(&quot;&quot; + value.get(index))) { return Integer.parseInt(&quot;&quot; + value.get(index)); }</span>
+<span class="nc" id="L84">        else { return additionalValueMapping.get(value.get(index)); }</span>
     }
 
     /**
@@ -77,16 +89,33 @@ public class BaseNumber {
      * @param digit the provided digit
      * @return the associated character
      */
-    public char getAssociatedCharacter(int digit) {
-<span class="nc bnc" id="L81" title="All 4 branches missed.">        if (digit &gt;= 0 || digit &lt;= 9) { return ((Integer) digit).toString().charAt(0); }</span>
+    public final char getAssociatedCharacter(int digit) {
+<span class="nc bnc" id="L93" title="All 4 branches missed.">        if (digit &gt;= 0 &amp;&amp; digit &lt;= 9) { return ((Integer) digit).toString().charAt(0); }</span>
         else {
-<span class="nc bnc" id="L83" title="All 2 branches missed.">            for (char associatedCharacter : additionalValueMapping.keySet()) {</span>
-<span class="nc bnc" id="L84" title="All 2 branches missed.">                if (additionalValueMapping.get(associatedCharacter) == digit) {</span>
-<span class="nc" id="L85">                    return associatedCharacter;</span>
+<span class="nc bnc" id="L95" title="All 2 branches missed.">            for (char associatedCharacter : additionalValueMapping.keySet()) {</span>
+<span class="nc bnc" id="L96" title="All 2 branches missed.">                if (additionalValueMapping.get(associatedCharacter) == digit) {</span>
+<span class="nc" id="L97">                    return associatedCharacter;</span>
                 }
-<span class="nc" id="L87">            }</span>
+<span class="nc" id="L99">            }</span>
         }
-<span class="nc" id="L89">        return '\0';</span>
+<span class="nc" id="L101">        return '\0';</span>
+    }
+
+    /**
+     * Compares this number with another BaseNumber n.
+     * @param n the number to compare against
+     * @return -1 if less than, 0 if equal, 1 if greater than
+     */
+    public byte compare(BaseNumber n) {
+<span class="nc bnc" id="L110" title="All 2 branches missed.">        if (this.value.size() &gt; n.getValue().size()) { return 1; }</span>
+<span class="nc bnc" id="L111" title="All 2 branches missed.">        else if (this.value.size() &lt; n.getValue().size()) { return -1; }</span>
+        else {
+<span class="nc bnc" id="L113" title="All 2 branches missed.">            for (int i = this.value.size() - 1; i &gt;= 0; i--) {</span>
+<span class="nc bnc" id="L114" title="All 2 branches missed.">                if (this.digitValueAt(i) &gt; n.digitValueAt(i)) { return 1; }</span>
+<span class="nc bnc" id="L115" title="All 2 branches missed.">                else if (this.digitValueAt(i) &lt; n.digitValueAt(i)) { return -1; }</span>
+            }
+<span class="nc" id="L117">            return 0;</span>
+        }
     }
 
     /**
@@ -94,28 +123,28 @@ public class BaseNumber {
      */
     @Override
     public String toString() {
-<span class="nc" id="L97">        String result = &quot;&quot;;</span>
-<span class="nc bnc" id="L98" title="All 2 branches missed.">        for (int i = value.size() - 1; i &gt;= 0; i--) { result += value.get(i); }</span>
-<span class="nc" id="L99">        return result;</span>
+<span class="nc" id="L126">        String result = &quot;&quot;;</span>
+<span class="nc bnc" id="L127" title="All 2 branches missed.">        for (int i = value.size() - 1; i &gt;= 0; i--) { result += value.get(i); }</span>
+<span class="nc bnc" id="L128" title="All 2 branches missed.">        return negative ? &quot;-&quot; + result : result;</span>
     }
 
     /**
      * Converts this number from base p to base 10 using substitution.
      * @return the converted number
      */
-    public int convertToBaseTen() {
-<span class="nc" id="L107">        int result = 0;</span>
-<span class="nc" id="L108">        int power = 1;</span>
+    public final int convertToBaseTen() {
+<span class="nc" id="L136">        int result = 0;</span>
+<span class="nc" id="L137">        int power = 1;</span>
 
-<span class="nc bnc" id="L110" title="All 2 branches missed.">        for (char digitRepresentation : value) {</span>
-<span class="nc" id="L111">            int digit = 0;</span>
-<span class="nc bnc" id="L112" title="All 2 branches missed.">            if (&quot;0123456789&quot;.contains(&quot;&quot; + digitRepresentation)) { digit = Integer.parseInt(&quot;&quot; + digitRepresentation); }</span>
-<span class="nc" id="L113">            else { digit = additionalValueMapping.get(digitRepresentation); }</span>
-<span class="nc" id="L114">            result += digit * power;</span>
-<span class="nc" id="L115">            power *= base;</span>
-<span class="nc" id="L116">        }</span>
+<span class="nc bnc" id="L139" title="All 2 branches missed.">        for (char digitRepresentation : value) {</span>
+<span class="nc" id="L140">            int digit = 0;</span>
+<span class="nc bnc" id="L141" title="All 2 branches missed.">            if (&quot;0123456789&quot;.contains(&quot;&quot; + digitRepresentation)) { digit = Integer.parseInt(&quot;&quot; + digitRepresentation); }</span>
+<span class="nc" id="L142">            else { digit = additionalValueMapping.get(digitRepresentation); }</span>
+<span class="nc" id="L143">            result += digit * power;</span>
+<span class="nc" id="L144">            power *= base;</span>
+<span class="nc" id="L145">        }</span>
 
-<span class="nc" id="L118">        return result;</span>
+<span class="nc bnc" id="L147" title="All 2 branches missed.">        return negative ? -result : result;</span>
     }
 
 }

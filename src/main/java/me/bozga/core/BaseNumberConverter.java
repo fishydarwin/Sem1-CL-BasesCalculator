@@ -20,7 +20,7 @@ public class BaseNumberConverter {
 
         int i = 0;
         BaseNumber[] divResult = {n, n};
-        while (divResult[0].getValue().size() > 0 && divResult[0].getValue().get(0) != '0') {
+        while (divResult[0].getValue().size() > 1 || divResult[0].getValue().get(0) != '0') {
             divResult = BaseNumberOperators.divDigit(divResult[0], divisorInSourceBase);
             r.addDigitAt(i, r.getAssociatedCharacter(divResult[1].convertToBaseTen()));
             i++;

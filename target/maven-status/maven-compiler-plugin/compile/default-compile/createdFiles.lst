@@ -1,5 +1,7 @@
+me/bozga/core/BaseNumberOperators.class
+me/bozga/ui/UI$2.class
 me/bozga/ui/UI.class
 me/bozga/core/BaseNumber.class
+me/bozga/core/BaseNumberConverter.class
 me/bozga/ui/UI$1.class
-me/bozga/core/BaseNumberOperators.class
 me/bozga/App.class

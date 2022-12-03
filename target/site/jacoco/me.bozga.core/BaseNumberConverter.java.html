@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ro"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BaseNumberConverter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">basescalculator</a> &gt; <a href="index.source.html" class="el_package">me.bozga.core</a> &gt; <span class="el_source">BaseNumberConverter.java</span></div><h1>BaseNumberConverter.java</h1><pre class="source lang-java linenums">package me.bozga.core;
+
+<span class="nc" id="L3">public class BaseNumberConverter {</span>
+    
+    /**
+     * Takes a BaseNumber n and places it into BaseNumber r, assuming r is 0, in r's base.&lt;br&gt;
+     * This only works if r's base is smaller than n's.
+     * @param n the number to convert
+     * @param r the number where to place the conversion
+     * @returns r
+     * @throws IllegalArgumentException if r's base is greater than n's
+     */
+    public static BaseNumber convertBySuccessiveDivisions(BaseNumber n, BaseNumber r) {
+<span class="nc bnc" id="L14" title="All 2 branches missed.">        if (r.getBase() &gt; n.getBase()) { </span>
+<span class="nc" id="L15">            throw new IllegalArgumentException(&quot;Target number cannot have a larger base than source.&quot;); </span>
+        }
+
+<span class="nc" id="L18">        BaseNumber divisorInSourceBase = new BaseNumber(n.getBase(), false, </span>
+<span class="nc" id="L19">                                                        ((Byte) r.getBase()).toString(), n.getAdditionalValueMapping());</span>
+
+<span class="nc" id="L21">        int i = 0;</span>
+<span class="nc" id="L22">        BaseNumber[] divResult = {n, n};</span>
+<span class="nc bnc" id="L23" title="All 4 branches missed.">        while (divResult[0].getValue().size() &gt; 1 || divResult[0].getValue().get(0) != '0') {</span>
+<span class="nc" id="L24">            divResult = BaseNumberOperators.divDigit(divResult[0], divisorInSourceBase);</span>
+<span class="nc" id="L25">            r.addDigitAt(i, r.getAssociatedCharacter(divResult[1].convertToBaseTen()));</span>
+<span class="nc" id="L26">            i++;</span>
+        }
+
+<span class="nc" id="L29">        return r;</span>
+    }
+
+    /**
+     * Takes a BaseNumber n and places it into BaseNumber r, assuming r is 0, in r's base.&lt;br&gt;
+     * This only works if r's base is greater than n's.
+     * @param n the number to convert
+     * @param r the number where to place the conversion
+     * @returns r
+     * @throws IllegalArgumentException if r's base is lower than n's
+     */
+    public static BaseNumber convertBySubstitution(BaseNumber n, BaseNumber r) {
+<span class="nc bnc" id="L41" title="All 2 branches missed.">        if (r.getBase() &lt; n.getBase()) { </span>
+<span class="nc" id="L42">            throw new IllegalArgumentException(&quot;Target number cannot have a smaller base than source.&quot;); </span>
+        }
+
+<span class="nc" id="L45">        System.out.println(r.getAssociatedCharacter(n.getBase()));</span>
+
+<span class="nc" id="L47">        BaseNumber multiplicationPower = new BaseNumber(r.getBase(), false, </span>
+<span class="nc" id="L48">                                                        &quot;1&quot;, r.getAdditionalValueMapping());</span>
+<span class="nc" id="L49">        BaseNumber multiplicationBase = new BaseNumber(r.getBase(), false, </span>
+<span class="nc" id="L50">                                                    &quot;&quot; + r.getAssociatedCharacter(n.getBase()), r.getAdditionalValueMapping());</span>
+        
+<span class="nc bnc" id="L52" title="All 2 branches missed.">        for (int i = 0; i &lt; n.getValue().size(); i++) {</span>
+<span class="nc" id="L53">            BaseNumber digitToMultiply = new BaseNumber(r.getBase(), false, </span>
+<span class="nc" id="L54">                                                        &quot;&quot; + n.getValue().get(i), r.getAdditionalValueMapping());</span>
+<span class="nc" id="L55">            r = BaseNumberOperators.add(r, BaseNumberOperators.mulDigit(multiplicationPower, digitToMultiply)); // order matters</span>
+<span class="nc" id="L56">            multiplicationPower = BaseNumberOperators.mulDigit(multiplicationPower, multiplicationBase); // here too</span>
+        }
+
+<span class="nc" id="L59">        return r;</span>
+
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

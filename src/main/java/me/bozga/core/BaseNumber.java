@@ -14,6 +14,7 @@ import java.util.stream.Stream;
 public class BaseNumber {
     
     private byte base;
+    private boolean negative;
     private List<Character> value;
     private Map<Character, Integer> additionalValueMapping;
 
@@ -28,8 +29,11 @@ public class BaseNumber {
         new AbstractMap.SimpleImmutableEntry<>('f', 15))
         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
-    public BaseNumber(byte base, String value, Map<Character, Integer> additionalValueMapping) throws IllegalArgumentException {
+    public BaseNumber(byte base, boolean negative, String value, Map<Character, Integer> additionalValueMapping) 
+                                                                                    throws IllegalArgumentException 
+        {
         this.base = base;
+        this.negative = negative;
         this.value = new ArrayList<>();
         this.additionalValueMapping = additionalValueMapping;
         value = value.toLowerCase();
@@ -49,6 +53,7 @@ public class BaseNumber {
     }
 
     public byte getBase() { return base; }
+    public boolean isNegative() { return negative; }
     public List<Character> getValue() { return value; }
     public Map<Character, Integer> getAdditionalValueMapping() { return additionalValueMapping; }
 
@@ -63,11 +68,18 @@ public class BaseNumber {
     }
 
     /**
+     * Removes the last digit - the last digit in this case means the first digit in base representation.
+     */
+    public void removeLastDigit() {
+        value.remove(value.size() - 1);
+    }
+
+    /**
      * Gets the absolute value of a digit as base 10 number at index i.
      * @param index the index to get from
      * @return the value as a base 10 number
      */
-    public int digitValueAt(int index) {
+    public final int digitValueAt(int index) {
         if ("0123456789".contains("" + value.get(index))) { return Integer.parseInt("" + value.get(index)); }
         else { return additionalValueMapping.get(value.get(index)); }
     }
@@ -77,7 +89,7 @@ public class BaseNumber {
      * @param digit the provided digit
      * @return the associated character
      */
-    public char getAssociatedCharacter(int digit) {
+    public final char getAssociatedCharacter(int digit) {
         if (digit >= 0 || digit <= 9) { return ((Integer) digit).toString().charAt(0); }
         else {
             for (char associatedCharacter : additionalValueMapping.keySet()) {
@@ -90,20 +102,37 @@ public class BaseNumber {
     }
 
     /**
+     * Compares this number with another BaseNumber n.
+     * @param n the number to compare against
+     * @return -1 if less than, 0 if equal, 1 if greater than
+     */
+    public byte compare(BaseNumber n) {
+        if (this.value.size() > n.getValue().size()) { return 1; }
+        else if (this.value.size() < n.getValue().size()) { return -1; }
+        else {
+            for (int i = this.value.size() - 1; i >= 0; i--) {
+                if (this.digitValueAt(i) > n.digitValueAt(i)) { return 1; }
+                else if (this.digitValueAt(i) < n.digitValueAt(i)) { return -1; }
+            }
+            return 0;
+        }
+    }
+
+    /**
      * Outputs a readable version of this number.
      */
     @Override
     public String toString() {
         String result = "";
         for (int i = value.size() - 1; i >= 0; i--) { result += value.get(i); }
-        return result;
+        return negative ? "-" + result : result;
     }
 
     /**
      * Converts this number from base p to base 10 using substitution.
      * @return the converted number
      */
-    public int convertToBaseTen() {
+    public final int convertToBaseTen() {
         int result = 0;
         int power = 1;
 
@@ -115,7 +144,7 @@ public class BaseNumber {
             power *= base;
         }
 
-        return result;
+        return negative ? -result : result;
     }
 
 }

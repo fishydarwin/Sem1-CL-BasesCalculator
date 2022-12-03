@@ -34,7 +34,7 @@ public class UI {
      */
     public static void initialize() {
         frame = new JFrame("Bases Calculator");
-        frame.setSize(640, 480);
+        frame.setSize(640, 360);
         frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
@@ -98,7 +98,7 @@ public class UI {
         JButton arithmeticCalculate = new JButton("Calculate");
         arithmeticCalculate.addActionListener(new ActionListener() {
             @Override public void actionPerformed(ActionEvent e) { 
-                calculateAction(operationComboBox, baseComboBox, firstNumberField, secondNumberField); 
+                arithmeticCalculateAction(operationComboBox, baseComboBox, firstNumberField, secondNumberField); 
             }
         });
         arithmeticCalculatePanel.add(arithmeticCalculate);
@@ -125,7 +125,48 @@ public class UI {
          * Base conversion panel
          */
         JPanel baseConversionPanel = new JPanel();
+        baseConversionPanel.setLayout(new BoxLayout(baseConversionPanel, BoxLayout.Y_AXIS));
         pane.addTab("Base Conversion", null, baseConversionPanel, "Perform base conversions.");
+
+        /* separator */ baseConversionPanel.add(Box.createVerticalGlue());
+
+        // first number stuff
+        JPanel baseFirstNumberPanel = new JPanel();
+        baseFirstNumberPanel.setMaximumSize(new Dimension(480, 150));
+        baseFirstNumberPanel.setBorder(BorderFactory.createTitledBorder("Initial Number"));
+        JLabel baseFirstNumberLabel = new JLabel("A =");
+        JTextField baseFirstNumberField = new JTextField(16);
+        JLabel baseFirstBaseLabel = new JLabel("in base");
+        JComboBox<Byte> baseFirstBaseComboBox = new JComboBox<>(allowedBases);
+        baseFirstNumberPanel.add(baseFirstNumberLabel);
+        baseFirstNumberPanel.add(baseFirstNumberField);
+        baseFirstNumberPanel.add(baseFirstBaseLabel);
+        baseFirstNumberPanel.add(baseFirstBaseComboBox);
+        baseConversionPanel.add(baseFirstNumberPanel);
+
+        // second number stuff
+        JPanel baseSecondNumberPanel = new JPanel();
+        baseSecondNumberPanel.setMaximumSize(new Dimension(480, 300));
+        baseSecondNumberPanel.setBorder(BorderFactory.createTitledBorder("Result Number"));
+        JLabel baseSecondBaseLabel = new JLabel("A in base");
+        JComboBox<Byte> baseSecondBaseComboBox = new JComboBox<>(allowedBases);
+        JLabel baseSecondNumberLabel = new JLabel("gives A' = ");
+        JTextField baseSecondNumberField = new JTextField(14);
+        JButton baseCalculate = new JButton("Calculate");
+        baseCalculate.addActionListener(new ActionListener() {
+            @Override public void actionPerformed(ActionEvent e) { 
+                //baseCalculateAction(operationComboBox, baseComboBox, firstNumberField, secondNumberField); 
+            }
+        });
+        baseSecondNumberField.setEditable(false);
+        baseSecondNumberPanel.add(baseSecondBaseLabel);
+        baseSecondNumberPanel.add(baseSecondBaseComboBox);
+        baseSecondNumberPanel.add(baseSecondNumberLabel);
+        baseSecondNumberPanel.add(baseSecondNumberField);
+        baseSecondNumberPanel.add(baseCalculate);
+        baseConversionPanel.add(baseSecondNumberPanel);
+
+        /* separator */ baseConversionPanel.add(Box.createVerticalGlue());
 
         frame.add(pane);
         frame.setVisible(true);
@@ -135,7 +176,7 @@ public class UI {
      * FUNCTIONALITY OF BUTTONS AND SUCH
      */
     
-    private static void calculateAction(JComboBox<String> operationComboBox, 
+    private static void arithmeticCalculateAction(JComboBox<String> operationComboBox, 
                                     JComboBox<Byte> baseComboBox, 
                                     JTextField firstNumberField, 
                                     JTextField secondNumberField) 
@@ -149,23 +190,26 @@ public class UI {
             byte base = (byte) baseComboBox.getSelectedItem();
             int operation = operationComboBox.getSelectedIndex(); // 0 = ADD, 1 = SUB, 2 = MUL, 3 = DIV
 
-            BaseNumber a = new BaseNumber(base, firstNumberField.getText(), additionalValueMapping);
-            BaseNumber b = new BaseNumber(base, secondNumberField.getText(), additionalValueMapping);
+            BaseNumber a = new BaseNumber(base, false, firstNumberField.getText(), additionalValueMapping);
+            BaseNumber b = new BaseNumber(base, false, secondNumberField.getText(), additionalValueMapping);
 
             switch (operation) {
                 case 0:
                     resultNumberField.setText(BaseNumberOperators.add(a, b).toString());
                     break;
                 case 1:
-                    // resultNumberField.setText(BaseNumberOperators.sub(a, b).toString());
+                    resultNumberField.setText(BaseNumberOperators.sub(a, b).toString());
                     break;
                 case 2:
-                    // resultNumberField.setText(BaseNumberOperators.mulDigit(a, b).toString());
+                    resultNumberField.setText(BaseNumberOperators.mulDigit(a, b).toString());
                     break;
                 case 3:
-                    // resultNumberField.setText(BaseNumberOperators.divDigit(a, b).toString());
+                    BaseNumber[] resultArray = BaseNumberOperators.divDigit(a, b);
+                    resultNumberField.setText(resultArray[0].toString() + ", remainder " + resultArray[1].toString());
                     break;
             }
+
+            arithmeticErrorLabel.setText("OK");
 
         } catch (Exception ex) {
             String message = ex.getMessage();

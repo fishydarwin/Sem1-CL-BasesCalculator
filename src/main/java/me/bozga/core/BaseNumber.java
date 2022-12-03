@@ -90,7 +90,7 @@ public class BaseNumber {
      * @return the associated character
      */
     public final char getAssociatedCharacter(int digit) {
-        if (digit >= 0 || digit <= 9) { return ((Integer) digit).toString().charAt(0); }
+        if (digit >= 0 && digit <= 9) { return ((Integer) digit).toString().charAt(0); }
         else {
             for (char associatedCharacter : additionalValueMapping.keySet()) {
                 if (additionalValueMapping.get(associatedCharacter) == digit) {

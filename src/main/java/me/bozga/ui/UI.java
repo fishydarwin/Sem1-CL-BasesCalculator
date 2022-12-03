@@ -18,6 +18,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
 import me.bozga.core.BaseNumber;
+import me.bozga.core.BaseNumberConverter;
 import me.bozga.core.BaseNumberOperators;
 
 public class UI {
@@ -27,6 +28,7 @@ public class UI {
     private static JTextField resultNumberField;
     private static JLabel arithmeticErrorLabel;
 
+    private static JTextField baseSecondNumberField;
     private static JLabel baseConversionErrorLabel;
 
     /**
@@ -146,16 +148,16 @@ public class UI {
 
         // second number stuff
         JPanel baseSecondNumberPanel = new JPanel();
-        baseSecondNumberPanel.setMaximumSize(new Dimension(480, 300));
+        baseSecondNumberPanel.setMaximumSize(new Dimension(480, 150));
         baseSecondNumberPanel.setBorder(BorderFactory.createTitledBorder("Result Number"));
         JLabel baseSecondBaseLabel = new JLabel("A in base");
         JComboBox<Byte> baseSecondBaseComboBox = new JComboBox<>(allowedBases);
         JLabel baseSecondNumberLabel = new JLabel("gives A' = ");
-        JTextField baseSecondNumberField = new JTextField(14);
+        baseSecondNumberField = new JTextField(8);
         JButton baseCalculate = new JButton("Calculate");
         baseCalculate.addActionListener(new ActionListener() {
             @Override public void actionPerformed(ActionEvent e) { 
-                //baseCalculateAction(operationComboBox, baseComboBox, firstNumberField, secondNumberField); 
+                baseCalculateAction(baseFirstNumberField, baseFirstBaseComboBox, baseSecondBaseComboBox); 
             }
         });
         baseSecondNumberField.setEditable(false);
@@ -165,6 +167,14 @@ public class UI {
         baseSecondNumberPanel.add(baseSecondNumberField);
         baseSecondNumberPanel.add(baseCalculate);
         baseConversionPanel.add(baseSecondNumberPanel);
+
+        /* separator */ baseConversionPanel.add(Box.createVerticalGlue());
+
+        JPanel baseConversionErrorPanel = new JPanel();
+        baseConversionErrorPanel.setMaximumSize(new Dimension(640, 150));
+        baseConversionErrorLabel = new JLabel("");
+        baseConversionErrorPanel.add(baseConversionErrorLabel);
+        baseConversionPanel.add(baseConversionErrorPanel);
 
         /* separator */ baseConversionPanel.add(Box.createVerticalGlue());
 
@@ -215,6 +225,44 @@ public class UI {
             String message = ex.getMessage();
             if (message.length() > 128) { message = message.substring(0, 128) + " [...]"; }
             arithmeticErrorLabel.setText(message);
+        }
+    }
+
+    private static void baseCalculateAction(JTextField baseFirstNumberField, 
+                                    JComboBox<Byte> baseFirstComboBox, 
+                                    JComboBox<Byte> baseSecondComboBox) 
+    {
+        // validate input
+        try {
+
+            byte firstBase = (byte) baseFirstComboBox.getSelectedItem();
+            Map<Character, Integer> firstAdditionalValueMapping = BaseNumber.NO_MAP;
+            if (baseFirstComboBox.getSelectedIndex() == 9) { firstAdditionalValueMapping = BaseNumber.BASE_16_MAP; }
+
+            byte secondBase = (byte) baseSecondComboBox.getSelectedItem();
+            Map<Character, Integer> secondAdditionalValueMapping = BaseNumber.NO_MAP;
+            if (baseSecondComboBox.getSelectedIndex() == 9) { secondAdditionalValueMapping = BaseNumber.BASE_16_MAP; }
+
+            
+            BaseNumber n = new BaseNumber(firstBase, false, baseFirstNumberField.getText(), firstAdditionalValueMapping);
+            BaseNumber r = new BaseNumber(secondBase, false, "0", secondAdditionalValueMapping);
+
+            if (firstBase == secondBase) { r = n; }
+            else if (firstBase > secondBase) {
+                // successive division
+                r = BaseNumberConverter.convertBySuccessiveDivisions(n, r);
+            } else {
+                // substitution
+                r = BaseNumberConverter.convertBySubstitution(n, r);
+            }
+
+            baseSecondNumberField.setText(r.toString()); 
+            baseConversionErrorLabel.setText("OK");
+
+        } catch (Exception ex) {
+            String message = ex.getMessage();
+            if (message.length() > 128) { message = message.substring(0, 128) + " [...]"; }
+            baseConversionErrorLabel.setText(message);
         }
     }
     

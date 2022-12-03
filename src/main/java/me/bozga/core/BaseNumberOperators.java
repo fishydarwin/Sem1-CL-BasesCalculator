@@ -23,7 +23,7 @@ public class BaseNumberOperators {
         // figure out order
         int additions;
         BaseNumber largerNumber;
-        if (a.getValue().size() > b.getValue().size()) {
+        if (a.compare(b) > 0) {
             additions = b.getValue().size();
             largerNumber = a;
         } else {

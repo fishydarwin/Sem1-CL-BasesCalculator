@@ -23,7 +23,7 @@
         // figure out order
         int additions;
         BaseNumber largerNumber;
-<span class="nc bnc" id="L26" title="All 2 branches missed.">        if (a.getValue().size() &gt; b.getValue().size()) {</span>
+<span class="nc bnc" id="L26" title="All 2 branches missed.">        if (a.compare(b) &gt; 0) {</span>
 <span class="nc" id="L27">            additions = b.getValue().size();</span>
 <span class="nc" id="L28">            largerNumber = a;</span>
         } else {

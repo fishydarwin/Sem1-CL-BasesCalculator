@@ -15,8 +15,8 @@ public class BaseNumberConverter {
             throw new IllegalArgumentException("Target number cannot have a larger base than source."); 
         }
 
-        BaseNumber divisorInSourceBase = new BaseNumber(n.getBase(), false, 
-                                                        ((Byte) r.getBase()).toString(), n.getAdditionalValueMapping());
+        BaseNumber divisorInSourceBase = new BaseNumber(n.getBase(), false, "" + n.getAssociatedCharacter(r.getBase()), 
+                                                        n.getAdditionalValueMapping());
 
         int i = 0;
         BaseNumber[] divResult = {n, n};
@@ -41,8 +41,6 @@ public class BaseNumberConverter {
         if (r.getBase() < n.getBase()) { 
             throw new IllegalArgumentException("Target number cannot have a smaller base than source."); 
         }
-
-        System.out.println(r.getAssociatedCharacter(n.getBase()));
 
         BaseNumber multiplicationPower = new BaseNumber(r.getBase(), false, 
                                                         "1", r.getAdditionalValueMapping());

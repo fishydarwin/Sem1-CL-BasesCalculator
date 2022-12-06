@@ -15,8 +15,8 @@
 <span class="nc" id="L15">            throw new IllegalArgumentException(&quot;Target number cannot have a larger base than source.&quot;); </span>
         }
 
-<span class="nc" id="L18">        BaseNumber divisorInSourceBase = new BaseNumber(n.getBase(), false, </span>
-<span class="nc" id="L19">                                                        ((Byte) r.getBase()).toString(), n.getAdditionalValueMapping());</span>
+<span class="nc" id="L18">        BaseNumber divisorInSourceBase = new BaseNumber(n.getBase(), false, &quot;&quot; + n.getAssociatedCharacter(r.getBase()), </span>
+<span class="nc" id="L19">                                                        n.getAdditionalValueMapping());</span>
 
 <span class="nc" id="L21">        int i = 0;</span>
 <span class="nc" id="L22">        BaseNumber[] divResult = {n, n};</span>
@@ -42,21 +42,19 @@
 <span class="nc" id="L42">            throw new IllegalArgumentException(&quot;Target number cannot have a smaller base than source.&quot;); </span>
         }
 
-<span class="nc" id="L45">        System.out.println(r.getAssociatedCharacter(n.getBase()));</span>
-
-<span class="nc" id="L47">        BaseNumber multiplicationPower = new BaseNumber(r.getBase(), false, </span>
-<span class="nc" id="L48">                                                        &quot;1&quot;, r.getAdditionalValueMapping());</span>
-<span class="nc" id="L49">        BaseNumber multiplicationBase = new BaseNumber(r.getBase(), false, </span>
-<span class="nc" id="L50">                                                    &quot;&quot; + r.getAssociatedCharacter(n.getBase()), r.getAdditionalValueMapping());</span>
+<span class="nc" id="L45">        BaseNumber multiplicationPower = new BaseNumber(r.getBase(), false, </span>
+<span class="nc" id="L46">                                                        &quot;1&quot;, r.getAdditionalValueMapping());</span>
+<span class="nc" id="L47">        BaseNumber multiplicationBase = new BaseNumber(r.getBase(), false, </span>
+<span class="nc" id="L48">                                                    &quot;&quot; + r.getAssociatedCharacter(n.getBase()), r.getAdditionalValueMapping());</span>
         
-<span class="nc bnc" id="L52" title="All 2 branches missed.">        for (int i = 0; i &lt; n.getValue().size(); i++) {</span>
-<span class="nc" id="L53">            BaseNumber digitToMultiply = new BaseNumber(r.getBase(), false, </span>
-<span class="nc" id="L54">                                                        &quot;&quot; + n.getValue().get(i), r.getAdditionalValueMapping());</span>
-<span class="nc" id="L55">            r = BaseNumberOperators.add(r, BaseNumberOperators.mulDigit(multiplicationPower, digitToMultiply)); // order matters</span>
-<span class="nc" id="L56">            multiplicationPower = BaseNumberOperators.mulDigit(multiplicationPower, multiplicationBase); // here too</span>
+<span class="nc bnc" id="L50" title="All 2 branches missed.">        for (int i = 0; i &lt; n.getValue().size(); i++) {</span>
+<span class="nc" id="L51">            BaseNumber digitToMultiply = new BaseNumber(r.getBase(), false, </span>
+<span class="nc" id="L52">                                                        &quot;&quot; + n.getValue().get(i), r.getAdditionalValueMapping());</span>
+<span class="nc" id="L53">            r = BaseNumberOperators.add(r, BaseNumberOperators.mulDigit(multiplicationPower, digitToMultiply)); // order matters</span>
+<span class="nc" id="L54">            multiplicationPower = BaseNumberOperators.mulDigit(multiplicationPower, multiplicationBase); // here too</span>
         }
 
-<span class="nc" id="L59">        return r;</span>
+<span class="nc" id="L57">        return r;</span>
 
     }
 

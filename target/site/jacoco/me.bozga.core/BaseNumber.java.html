@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Represents a positive number with a base less than 10.
+ * Represents a positive number with any base.
  */
 public class BaseNumber {
     

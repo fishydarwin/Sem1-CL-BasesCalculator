@@ -10,7 +10,7 @@
      * @returns r
      * @throws IllegalArgumentException if r's base is greater than n's
      */
-    public static BaseNumber convertBySuccessiveDivisions(BaseNumber n, BaseNumber r) {
+    public static BaseNumber convertBySuccessiveDivisions(final BaseNumber n, BaseNumber r) {
 <span class="nc bnc" id="L14" title="All 2 branches missed.">        if (r.getBase() &gt; n.getBase()) { </span>
 <span class="nc" id="L15">            throw new IllegalArgumentException(&quot;Target number cannot have a larger base than source.&quot;); </span>
         }
@@ -37,7 +37,7 @@
      * @returns r
      * @throws IllegalArgumentException if r's base is lower than n's
      */
-    public static BaseNumber convertBySubstitution(BaseNumber n, BaseNumber r) {
+    public static BaseNumber convertBySubstitution(final BaseNumber n, BaseNumber r) {
 <span class="nc bnc" id="L41" title="All 2 branches missed.">        if (r.getBase() &lt; n.getBase()) { </span>
 <span class="nc" id="L42">            throw new IllegalArgumentException(&quot;Target number cannot have a smaller base than source.&quot;); </span>
         }
@@ -55,6 +55,82 @@
         }
 
 <span class="nc" id="L57">        return r;</span>
+
+    }
+
+    /**
+     * Takes a BaseNumber n and rapid converts it to BaseNumber r, assuming r is 0.
+     * This only works if log br (bn) returns an integer number
+     * @param n the number to convert
+     * @param r the number where to place the conversion
+     * @return r
+     * @throws IllegalArgumentException if n's base cannot be written as r to an integer power
+     */
+    public static BaseNumber convertByRapidConversion(final BaseNumber n, BaseNumber r) throws IllegalArgumentException {
+<span class="nc bnc" id="L70" title="All 2 branches missed.">        if (r.getBase() &lt; n.getBase()) { // lower conversion</span>
+
+<span class="nc" id="L72">            double predictedGroupSize = Math.log(n.getBase()) / Math.log(r.getBase()); // log br (bn) = ln(bn) / ln (br)</span>
+<span class="nc" id="L73">            int groupSize = (int) predictedGroupSize;</span>
+<span class="nc bnc" id="L74" title="All 2 branches missed.">            if (groupSize != predictedGroupSize) {</span>
+<span class="nc" id="L75">                throw new IllegalArgumentException(&quot;Cannot lower rapid convert to target number.&quot;); </span>
+            }
+            
+            // convert 1 digit into groups of digit in target base
+            BaseNumber groupNumber;
+<span class="nc" id="L80">            int currentPosition = 0;</span>
+<span class="nc bnc" id="L81" title="All 2 branches missed.">            for (int i = 0; i &lt; n.getValue().size(); i++) {</span>
+<span class="nc" id="L82">                groupNumber = new BaseNumber(r.getBase(), false, &quot;0&quot;, r.getAdditionalValueMapping());</span>
+<span class="nc" id="L83">                groupNumber = convertBySuccessiveDivisions(</span>
+<span class="nc" id="L84">                    new BaseNumber(n.getBase(), false, &quot;&quot; + n.getValue().get(i), n.getAdditionalValueMapping()), groupNumber);</span>
+<span class="nc bnc" id="L85" title="All 2 branches missed.">                while (groupNumber.getValue().size() % groupSize != 0) {</span>
+<span class="nc" id="L86">                    groupNumber.addDigitAt(groupNumber.getValue().size(), '0');</span>
+                }
+<span class="nc bnc" id="L88" title="All 2 branches missed.">                for (int j = 0; j &lt; groupNumber.getValue().size(); j++) {</span>
+<span class="nc" id="L89">                    r.addDigitAt(currentPosition, groupNumber.getValue().get(j));</span>
+<span class="nc" id="L90">                    currentPosition++;</span>
+                }
+            }
+            
+            // clean up inevitable trailing zeros
+<span class="nc bnc" id="L95" title="All 2 branches missed.">            for (int j = r.getValue().size() - 1; j &gt; 0; j--) {</span>
+<span class="nc bnc" id="L96" title="All 2 branches missed.">                if (r.getValue().get(j) != '0') { break; }</span>
+<span class="nc" id="L97">                r.removeLastDigit();</span>
+            }
+
+<span class="nc" id="L100">            return r;</span>
+
+<span class="nc bnc" id="L102" title="All 2 branches missed.">        } else if (r.getBase() &gt; n.getBase()) { // upper conversion</span>
+
+<span class="nc" id="L104">            double predictedGroupSize = Math.log(r.getBase()) / Math.log(n.getBase()); // log bn (br) = ln(br) / ln (bn)</span>
+<span class="nc" id="L105">            int groupSize = (int) predictedGroupSize;</span>
+<span class="nc bnc" id="L106" title="All 2 branches missed.">            if (groupSize != predictedGroupSize) {</span>
+<span class="nc" id="L107">                throw new IllegalArgumentException(&quot;Cannot upper rapid convert to target number.&quot;); </span>
+            }
+
+<span class="nc bnc" id="L110" title="All 2 branches missed.">            while (n.getValue().size() % groupSize != 0) {</span>
+<span class="nc" id="L111">                n.addDigitAt(n.getValue().size(), '0');</span>
+            }
+
+            // convert groups of digit into 1 digit in target base
+            BaseNumber groupNumber;
+<span class="nc" id="L116">            int currentPosition = 0;</span>
+<span class="nc bnc" id="L117" title="All 2 branches missed.">            for (int i = 0; i &lt; n.getValue().size(); i += groupSize) {</span>
+<span class="nc" id="L118">                String concatenatedGroup = &quot;&quot;;</span>
+<span class="nc bnc" id="L119" title="All 2 branches missed.">                for (int j = i + groupSize - 1; j &gt;= i; j--) {</span>
+<span class="nc" id="L120">                    concatenatedGroup += n.getValue().get(j);</span>
+                }
+<span class="nc" id="L122">                groupNumber = new BaseNumber(r.getBase(), false, &quot;0&quot;, r.getAdditionalValueMapping());</span>
+<span class="nc" id="L123">                groupNumber = convertBySubstitution(</span>
+<span class="nc" id="L124">                    new BaseNumber(n.getBase(), false, concatenatedGroup, n.getAdditionalValueMapping()), groupNumber);</span>
+<span class="nc" id="L125">                r.addDigitAt(currentPosition, groupNumber.getValue().get(0));</span>
+<span class="nc" id="L126">                currentPosition++;</span>
+            }
+
+<span class="nc" id="L129">            return r;</span>
+
+        } else {
+<span class="nc" id="L132">            return n;</span>
+        }
 
     }
 

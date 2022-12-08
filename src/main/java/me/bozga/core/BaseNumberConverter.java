@@ -10,7 +10,7 @@ public class BaseNumberConverter {
      * @returns r
      * @throws IllegalArgumentException if r's base is greater than n's
      */
-    public static BaseNumber convertBySuccessiveDivisions(BaseNumber n, BaseNumber r) {
+    public static BaseNumber convertBySuccessiveDivisions(final BaseNumber n, BaseNumber r) {
         if (r.getBase() > n.getBase()) { 
             throw new IllegalArgumentException("Target number cannot have a larger base than source."); 
         }
@@ -37,7 +37,7 @@ public class BaseNumberConverter {
      * @returns r
      * @throws IllegalArgumentException if r's base is lower than n's
      */
-    public static BaseNumber convertBySubstitution(BaseNumber n, BaseNumber r) {
+    public static BaseNumber convertBySubstitution(final BaseNumber n, BaseNumber r) {
         if (r.getBase() < n.getBase()) { 
             throw new IllegalArgumentException("Target number cannot have a smaller base than source."); 
         }
@@ -55,6 +55,82 @@ public class BaseNumberConverter {
         }
 
         return r;
+
+    }
+
+    /**
+     * Takes a BaseNumber n and rapid converts it to BaseNumber r, assuming r is 0.
+     * This only works if log br (bn) returns an integer number
+     * @param n the number to convert
+     * @param r the number where to place the conversion
+     * @return r
+     * @throws IllegalArgumentException if n's base cannot be written as r to an integer power
+     */
+    public static BaseNumber convertByRapidConversion(final BaseNumber n, BaseNumber r) throws IllegalArgumentException {
+        if (r.getBase() < n.getBase()) { // lower conversion
+
+            double predictedGroupSize = Math.log(n.getBase()) / Math.log(r.getBase()); // log br (bn) = ln(bn) / ln (br)
+            int groupSize = (int) predictedGroupSize;
+            if (groupSize != predictedGroupSize) {
+                throw new IllegalArgumentException("Cannot lower rapid convert to target number."); 
+            }
+            
+            // convert 1 digit into groups of digit in target base
+            BaseNumber groupNumber;
+            int currentPosition = 0;
+            for (int i = 0; i < n.getValue().size(); i++) {
+                groupNumber = new BaseNumber(r.getBase(), false, "0", r.getAdditionalValueMapping());
+                groupNumber = convertBySuccessiveDivisions(
+                    new BaseNumber(n.getBase(), false, "" + n.getValue().get(i), n.getAdditionalValueMapping()), groupNumber);
+                while (groupNumber.getValue().size() % groupSize != 0) {
+                    groupNumber.addDigitAt(groupNumber.getValue().size(), '0');
+                }
+                for (int j = 0; j < groupNumber.getValue().size(); j++) {
+                    r.addDigitAt(currentPosition, groupNumber.getValue().get(j));
+                    currentPosition++;
+                }
+            }
+            
+            // clean up inevitable trailing zeros
+            for (int j = r.getValue().size() - 1; j > 0; j--) {
+                if (r.getValue().get(j) != '0') { break; }
+                r.removeLastDigit();
+            }
+
+            return r;
+
+        } else if (r.getBase() > n.getBase()) { // upper conversion
+
+            double predictedGroupSize = Math.log(r.getBase()) / Math.log(n.getBase()); // log bn (br) = ln(br) / ln (bn)
+            int groupSize = (int) predictedGroupSize;
+            if (groupSize != predictedGroupSize) {
+                throw new IllegalArgumentException("Cannot upper rapid convert to target number."); 
+            }
+
+            while (n.getValue().size() % groupSize != 0) {
+                n.addDigitAt(n.getValue().size(), '0');
+            }
+
+            // convert groups of digit into 1 digit in target base
+            BaseNumber groupNumber;
+            int currentPosition = 0;
+            for (int i = 0; i < n.getValue().size(); i += groupSize) {
+                String concatenatedGroup = "";
+                for (int j = i + groupSize - 1; j >= i; j--) {
+                    concatenatedGroup += n.getValue().get(j);
+                }
+                groupNumber = new BaseNumber(r.getBase(), false, "0", r.getAdditionalValueMapping());
+                groupNumber = convertBySubstitution(
+                    new BaseNumber(n.getBase(), false, concatenatedGroup, n.getAdditionalValueMapping()), groupNumber);
+                r.addDigitAt(currentPosition, groupNumber.getValue().get(0));
+                currentPosition++;
+            }
+
+            return r;
+
+        } else {
+            return n;
+        }
 
     }
 

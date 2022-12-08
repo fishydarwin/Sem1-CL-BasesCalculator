@@ -35,6 +35,7 @@ public class UI {
      * Initializes the main window.
      */
     public static void initialize() {
+
         frame = new JFrame("Bases Calculator");
         frame.setSize(640, 360);
         frame.setResizable(false);
@@ -247,17 +248,27 @@ public class UI {
             BaseNumber n = new BaseNumber(firstBase, false, baseFirstNumberField.getText(), firstAdditionalValueMapping);
             BaseNumber r = new BaseNumber(secondBase, false, "0", secondAdditionalValueMapping);
 
-            if (firstBase == secondBase) { r = n; }
-            else if (firstBase > secondBase) {
+            boolean rapidConversionPrediction;
+            try {
+                r = BaseNumberConverter.convertByRapidConversion(n, r);
+                rapidConversionPrediction = true;
+            } catch (IllegalArgumentException exception) {
+                rapidConversionPrediction = false;
+            }
+
+            if (rapidConversionPrediction) {
+                baseConversionErrorLabel.setText("OK (Rapid Conversion)");
+            } else if (firstBase > secondBase) {
                 // successive division
                 r = BaseNumberConverter.convertBySuccessiveDivisions(n, r);
+                baseConversionErrorLabel.setText("OK (Successive Divisions)");
             } else {
                 // substitution
                 r = BaseNumberConverter.convertBySubstitution(n, r);
+                baseConversionErrorLabel.setText("OK (Substitution)");
             }
 
             baseSecondNumberField.setText(r.toString()); 
-            baseConversionErrorLabel.setText("OK");
 
         } catch (Exception ex) {
             String message = ex.getMessage();

@@ -32,7 +32,7 @@ public class BaseNumberOperators {
         } else {
             additions = b.getValue().size();
             largerNumber = b;
-            while (a.getValue().size() != a.getValue().size()) {
+            while (a.getValue().size() != b.getValue().size()) {
                 a.addDigitAt(a.getValue().size(), '0');
             }
         }

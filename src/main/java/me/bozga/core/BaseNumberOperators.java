@@ -24,11 +24,17 @@ public class BaseNumberOperators {
         int additions;
         BaseNumber largerNumber;
         if (a.compare(b) > 0) {
-            additions = b.getValue().size();
-            largerNumber = a;
-        } else {
             additions = a.getValue().size();
+            largerNumber = a;
+            while (b.getValue().size() != a.getValue().size()) {
+                b.addDigitAt(b.getValue().size(), '0');
+            }
+        } else {
+            additions = b.getValue().size();
             largerNumber = b;
+            while (a.getValue().size() != a.getValue().size()) {
+                a.addDigitAt(a.getValue().size(), '0');
+            }
         }
 
         // main addition
@@ -47,10 +53,12 @@ public class BaseNumberOperators {
             result.addDigitAt(i, result.getAssociatedCharacter(carry + pushDigit));
             i++;
         }
-        while (i < largerNumber.getValue().size()) {
-            result.addDigitAt(i, largerNumber.getValue().get(i));
-            i++;
-        }
+        // while (i < largerNumber.getValue().size()) {
+        //     result.addDigitAt(i, largerNumber.getValue().get(i));
+        //     i++;
+        // }
+
+        System.out.println(a.toString() + " + " + b.toString() + " == " + result.toString());
 
         return result;
     }
@@ -112,6 +120,8 @@ public class BaseNumberOperators {
             result.removeLastDigit();
         }
 
+        System.out.println(a.toString() + " - " + b.toString() + " == " + result.toString());
+
         return result;
     }
 
@@ -150,6 +160,8 @@ public class BaseNumberOperators {
             if (result.getValue().get(j) != '0') { break; }
             result.removeLastDigit();
         }
+
+        System.out.println(a.toString() + " * " + b.toString() + " == " + result.toString());
 
         return result;
     }
@@ -191,6 +203,9 @@ public class BaseNumberOperators {
             result, 
             new BaseNumber(base, false, "" + result.getAssociatedCharacter(carry), result.getAdditionalValueMapping()) 
         };
+
+        System.out.println(a.toString() + " / " + b.toString() + " == " + resultArray[0].toString() + " r " + resultArray[1]);
+        
         return resultArray;
     }
 

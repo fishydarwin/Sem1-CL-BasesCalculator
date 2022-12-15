@@ -24,35 +24,43 @@
         int additions;
         BaseNumber largerNumber;
 <span class="nc bnc" id="L26" title="All 2 branches missed.">        if (a.compare(b) &gt; 0) {</span>
-<span class="nc" id="L27">            additions = b.getValue().size();</span>
+<span class="nc" id="L27">            additions = a.getValue().size();</span>
 <span class="nc" id="L28">            largerNumber = a;</span>
+<span class="nc bnc" id="L29" title="All 2 branches missed.">            while (b.getValue().size() != a.getValue().size()) {</span>
+<span class="nc" id="L30">                b.addDigitAt(b.getValue().size(), '0');</span>
+            }
         } else {
-<span class="nc" id="L30">            additions = a.getValue().size();</span>
-<span class="nc" id="L31">            largerNumber = b;</span>
+<span class="nc" id="L33">            additions = b.getValue().size();</span>
+<span class="nc" id="L34">            largerNumber = b;</span>
+<span class="nc bnc" id="L35" title="All 2 branches missed.">            while (a.getValue().size() != a.getValue().size()) {</span>
+<span class="nc" id="L36">                a.addDigitAt(a.getValue().size(), '0');</span>
+            }
         }
 
         // main addition
         int i;
-<span class="nc bnc" id="L36" title="All 2 branches missed.">        for (i = 0; i &lt; additions; i++) {</span>
-<span class="nc" id="L37">            int firstStep = a.digitValueAt(i) + b.digitValueAt(i) + carry;</span>
-<span class="nc" id="L38">            char resultDigit = result.getAssociatedCharacter(firstStep % base);</span>
-<span class="nc" id="L39">            result.addDigitAt(i, resultDigit);</span>
-<span class="nc" id="L40">            carry = firstStep / base;</span>
+<span class="nc bnc" id="L42" title="All 2 branches missed.">        for (i = 0; i &lt; additions; i++) {</span>
+<span class="nc" id="L43">            int firstStep = a.digitValueAt(i) + b.digitValueAt(i) + carry;</span>
+<span class="nc" id="L44">            char resultDigit = result.getAssociatedCharacter(firstStep % base);</span>
+<span class="nc" id="L45">            result.addDigitAt(i, resultDigit);</span>
+<span class="nc" id="L46">            carry = firstStep / base;</span>
         }
 
         // fill rest
-<span class="nc bnc" id="L44" title="All 2 branches missed.">        if (carry != 0) {</span>
-<span class="nc" id="L45">            int pushDigit = 0;</span>
-<span class="nc bnc" id="L46" title="All 2 branches missed.">            if (i &lt; largerNumber.getValue().size()) { pushDigit = largerNumber.digitValueAt(i); }</span>
-<span class="nc" id="L47">            result.addDigitAt(i, result.getAssociatedCharacter(carry + pushDigit));</span>
-<span class="nc" id="L48">            i++;</span>
+<span class="nc bnc" id="L50" title="All 2 branches missed.">        if (carry != 0) {</span>
+<span class="nc" id="L51">            int pushDigit = 0;</span>
+<span class="nc bnc" id="L52" title="All 2 branches missed.">            if (i &lt; largerNumber.getValue().size()) { pushDigit = largerNumber.digitValueAt(i); }</span>
+<span class="nc" id="L53">            result.addDigitAt(i, result.getAssociatedCharacter(carry + pushDigit));</span>
+<span class="nc" id="L54">            i++;</span>
         }
-<span class="nc bnc" id="L50" title="All 2 branches missed.">        while (i &lt; largerNumber.getValue().size()) {</span>
-<span class="nc" id="L51">            result.addDigitAt(i, largerNumber.getValue().get(i));</span>
-<span class="nc" id="L52">            i++;</span>
-        }
+        // while (i &lt; largerNumber.getValue().size()) {
+        //     result.addDigitAt(i, largerNumber.getValue().get(i));
+        //     i++;
+        // }
 
-<span class="nc" id="L55">        return result;</span>
+<span class="nc" id="L61">        System.out.println(a.toString() + &quot; + &quot; + b.toString() + &quot; == &quot; + result.toString());</span>
+
+<span class="nc" id="L63">        return result;</span>
     }
     
     /**
@@ -63,56 +71,58 @@
      * @throws IllegalArgumentException If base of a is different from base of b
      */
     public static BaseNumber sub(BaseNumber a, BaseNumber b) throws IllegalArgumentException {
-<span class="nc bnc" id="L66" title="All 2 branches missed.">        if (a.getBase() != b.getBase()) { throw new IllegalArgumentException(&quot;Cannot subtract two different bases.&quot;); }</span>
+<span class="nc bnc" id="L74" title="All 2 branches missed.">        if (a.getBase() != b.getBase()) { throw new IllegalArgumentException(&quot;Cannot subtract two different bases.&quot;); }</span>
 
         // initializers
-<span class="nc bnc" id="L69" title="All 2 branches missed.">        BaseNumber result = new BaseNumber(a.getBase(), a.compare(b) == -1, &quot;0&quot;, a.getAdditionalValueMapping());</span>
-<span class="nc" id="L70">        byte base = a.getBase();</span>
-<span class="nc" id="L71">        int carry = 0;</span>
+<span class="nc bnc" id="L77" title="All 2 branches missed.">        BaseNumber result = new BaseNumber(a.getBase(), a.compare(b) == -1, &quot;0&quot;, a.getAdditionalValueMapping());</span>
+<span class="nc" id="L78">        byte base = a.getBase();</span>
+<span class="nc" id="L79">        int carry = 0;</span>
 
         // figure out order and fill small one with zeros
         int subtractions;
         BaseNumber largerNumber;
         BaseNumber smallerNumber;
-<span class="nc bnc" id="L77" title="All 2 branches missed.">        if (a.compare(b) &gt; 0) {</span>
-<span class="nc bnc" id="L78" title="All 2 branches missed.">            if (b.getValue().size() != a.getValue().size()) { b.addDigitAt(a.getValue().size() - 1, '0'); }</span>
-<span class="nc" id="L79">            subtractions = b.getValue().size();</span>
-<span class="nc" id="L80">            largerNumber = a; smallerNumber = b;</span>
+<span class="nc bnc" id="L85" title="All 2 branches missed.">        if (a.compare(b) &gt; 0) {</span>
+<span class="nc bnc" id="L86" title="All 2 branches missed.">            if (b.getValue().size() != a.getValue().size()) { b.addDigitAt(a.getValue().size() - 1, '0'); }</span>
+<span class="nc" id="L87">            subtractions = b.getValue().size();</span>
+<span class="nc" id="L88">            largerNumber = a; smallerNumber = b;</span>
         } else {
             // fill a with 0s
-<span class="nc bnc" id="L83" title="All 2 branches missed.">            if (a.getValue().size() != b.getValue().size()) { a.addDigitAt(b.getValue().size() - 1, '0'); }</span>
-<span class="nc" id="L84">            subtractions = a.getValue().size();</span>
-<span class="nc" id="L85">            largerNumber = b; smallerNumber = a;</span>
+<span class="nc bnc" id="L91" title="All 2 branches missed.">            if (a.getValue().size() != b.getValue().size()) { a.addDigitAt(b.getValue().size() - 1, '0'); }</span>
+<span class="nc" id="L92">            subtractions = a.getValue().size();</span>
+<span class="nc" id="L93">            largerNumber = b; smallerNumber = a;</span>
         }
 
         // main subtraction
         int i;
-<span class="nc bnc" id="L90" title="All 2 branches missed.">        for (i = 0; i &lt; subtractions; i++) {</span>
-<span class="nc" id="L91">            int firstStep = largerNumber.digitValueAt(i) + carry;</span>
+<span class="nc bnc" id="L98" title="All 2 branches missed.">        for (i = 0; i &lt; subtractions; i++) {</span>
+<span class="nc" id="L99">            int firstStep = largerNumber.digitValueAt(i) + carry;</span>
             char resultDigit;
-<span class="nc bnc" id="L93" title="All 2 branches missed.">            if (firstStep &gt;= smallerNumber.digitValueAt(i)) { </span>
-<span class="nc" id="L94">                resultDigit = result.getAssociatedCharacter(firstStep - smallerNumber.digitValueAt(i));</span>
-<span class="nc" id="L95">                carry = 0;</span>
+<span class="nc bnc" id="L101" title="All 2 branches missed.">            if (firstStep &gt;= smallerNumber.digitValueAt(i)) { </span>
+<span class="nc" id="L102">                resultDigit = result.getAssociatedCharacter(firstStep - smallerNumber.digitValueAt(i));</span>
+<span class="nc" id="L103">                carry = 0;</span>
             } else { 
-<span class="nc" id="L97">                resultDigit = result.getAssociatedCharacter(firstStep + base - smallerNumber.digitValueAt(i));</span>
-<span class="nc" id="L98">                carry = -1;</span>
+<span class="nc" id="L105">                resultDigit = result.getAssociatedCharacter(firstStep + base - smallerNumber.digitValueAt(i));</span>
+<span class="nc" id="L106">                carry = -1;</span>
             }
-<span class="nc" id="L100">            result.addDigitAt(i, resultDigit);</span>
+<span class="nc" id="L108">            result.addDigitAt(i, resultDigit);</span>
         }
 
         // fill rest
-<span class="nc bnc" id="L104" title="All 2 branches missed.">        while (i &lt; largerNumber.getValue().size()) {</span>
-<span class="nc" id="L105">            result.addDigitAt(i, result.getAssociatedCharacter(largerNumber.getValue().get(i) + carry));</span>
-<span class="nc" id="L106">            i++;</span>
+<span class="nc bnc" id="L112" title="All 2 branches missed.">        while (i &lt; largerNumber.getValue().size()) {</span>
+<span class="nc" id="L113">            result.addDigitAt(i, result.getAssociatedCharacter(largerNumber.getValue().get(i) + carry));</span>
+<span class="nc" id="L114">            i++;</span>
         }
 
         // clean up trailing zeros
-<span class="nc bnc" id="L110" title="All 2 branches missed.">        for (int j = result.getValue().size() - 1; j &gt; 0; j--) {</span>
-<span class="nc bnc" id="L111" title="All 2 branches missed.">            if (result.getValue().get(j) != '0') { break; }</span>
-<span class="nc" id="L112">            result.removeLastDigit();</span>
+<span class="nc bnc" id="L118" title="All 2 branches missed.">        for (int j = result.getValue().size() - 1; j &gt; 0; j--) {</span>
+<span class="nc bnc" id="L119" title="All 2 branches missed.">            if (result.getValue().get(j) != '0') { break; }</span>
+<span class="nc" id="L120">            result.removeLastDigit();</span>
         }
 
-<span class="nc" id="L115">        return result;</span>
+<span class="nc" id="L123">        System.out.println(a.toString() + &quot; - &quot; + b.toString() + &quot; == &quot; + result.toString());</span>
+
+<span class="nc" id="L125">        return result;</span>
     }
 
     /**
@@ -123,35 +133,37 @@
      * @throws IllegalArgumentException If base of a is different from base of b, or if b is not 1 digit only
      */
     public static BaseNumber mulDigit(BaseNumber a, BaseNumber b) throws IllegalArgumentException {
-<span class="nc bnc" id="L126" title="All 2 branches missed.">        if (a.getBase() != b.getBase()) { throw new IllegalArgumentException(&quot;Cannot multiply two different bases.&quot;); }</span>
-<span class="nc bnc" id="L127" title="All 2 branches missed.">        if (b.getValue().size() &gt; 1) { throw new IllegalArgumentException(&quot;Second number must be 1 digit only.&quot;); }</span>
+<span class="nc bnc" id="L136" title="All 2 branches missed.">        if (a.getBase() != b.getBase()) { throw new IllegalArgumentException(&quot;Cannot multiply two different bases.&quot;); }</span>
+<span class="nc bnc" id="L137" title="All 2 branches missed.">        if (b.getValue().size() &gt; 1) { throw new IllegalArgumentException(&quot;Second number must be 1 digit only.&quot;); }</span>
 
         // initializers
-<span class="nc" id="L130">        BaseNumber result = new BaseNumber(a.getBase(), false, &quot;0&quot;, a.getAdditionalValueMapping());</span>
-<span class="nc" id="L131">        byte base = a.getBase();</span>
-<span class="nc" id="L132">        int carry = 0;</span>
+<span class="nc" id="L140">        BaseNumber result = new BaseNumber(a.getBase(), false, &quot;0&quot;, a.getAdditionalValueMapping());</span>
+<span class="nc" id="L141">        byte base = a.getBase();</span>
+<span class="nc" id="L142">        int carry = 0;</span>
 
         // main addition
         int i;
-<span class="nc bnc" id="L136" title="All 2 branches missed.">        for (i = 0; i &lt; a.getValue().size(); i++) {</span>
-<span class="nc" id="L137">            int firstStep = a.digitValueAt(i) * b.digitValueAt(0) + carry;</span>
-<span class="nc" id="L138">            carry = firstStep / base;</span>
-<span class="nc" id="L139">            char resultDigit = result.getAssociatedCharacter(firstStep - carry * base);</span>
-<span class="nc" id="L140">            result.addDigitAt(i, resultDigit);</span>
+<span class="nc bnc" id="L146" title="All 2 branches missed.">        for (i = 0; i &lt; a.getValue().size(); i++) {</span>
+<span class="nc" id="L147">            int firstStep = a.digitValueAt(i) * b.digitValueAt(0) + carry;</span>
+<span class="nc" id="L148">            carry = firstStep / base;</span>
+<span class="nc" id="L149">            char resultDigit = result.getAssociatedCharacter(firstStep - carry * base);</span>
+<span class="nc" id="L150">            result.addDigitAt(i, resultDigit);</span>
         }
 
         // fill with carry if needed
-<span class="nc bnc" id="L144" title="All 2 branches missed.">        if (carry != 0) {</span>
-<span class="nc" id="L145">            result.addDigitAt(i, result.getAssociatedCharacter(carry));</span>
+<span class="nc bnc" id="L154" title="All 2 branches missed.">        if (carry != 0) {</span>
+<span class="nc" id="L155">            result.addDigitAt(i, result.getAssociatedCharacter(carry));</span>
         }
 
         // clean up trailing zeros
-<span class="nc bnc" id="L149" title="All 2 branches missed.">        for (int j = result.getValue().size() - 1; j &gt; 0; j--) {</span>
-<span class="nc bnc" id="L150" title="All 2 branches missed.">            if (result.getValue().get(j) != '0') { break; }</span>
-<span class="nc" id="L151">            result.removeLastDigit();</span>
+<span class="nc bnc" id="L159" title="All 2 branches missed.">        for (int j = result.getValue().size() - 1; j &gt; 0; j--) {</span>
+<span class="nc bnc" id="L160" title="All 2 branches missed.">            if (result.getValue().get(j) != '0') { break; }</span>
+<span class="nc" id="L161">            result.removeLastDigit();</span>
         }
 
-<span class="nc" id="L154">        return result;</span>
+<span class="nc" id="L164">        System.out.println(a.toString() + &quot; * &quot; + b.toString() + &quot; == &quot; + result.toString());</span>
+
+<span class="nc" id="L166">        return result;</span>
     }
 
     /**
@@ -163,35 +175,38 @@
      * @throws ArithmeticException If division with 0
      */
     public static BaseNumber[] divDigit(BaseNumber a, BaseNumber b) throws IllegalArgumentException, ArithmeticException {
-<span class="nc bnc" id="L166" title="All 2 branches missed.">        if (a.getBase() != b.getBase()) { throw new IllegalArgumentException(&quot;Cannot divide two different bases.&quot;); }</span>
-<span class="nc bnc" id="L167" title="All 2 branches missed.">        if (b.getValue().size() &gt; 1) { throw new IllegalArgumentException(&quot;Second number must be 1 digit only.&quot;); }</span>
-<span class="nc bnc" id="L168" title="All 2 branches missed.">        if (b.getValue().get(0) == '0') { throw new ArithmeticException(&quot;Error - division by zero.&quot;); }</span>
+<span class="nc bnc" id="L178" title="All 2 branches missed.">        if (a.getBase() != b.getBase()) { throw new IllegalArgumentException(&quot;Cannot divide two different bases.&quot;); }</span>
+<span class="nc bnc" id="L179" title="All 2 branches missed.">        if (b.getValue().size() &gt; 1) { throw new IllegalArgumentException(&quot;Second number must be 1 digit only.&quot;); }</span>
+<span class="nc bnc" id="L180" title="All 2 branches missed.">        if (b.getValue().get(0) == '0') { throw new ArithmeticException(&quot;Error - division by zero.&quot;); }</span>
 
         // initializers
-<span class="nc" id="L171">        BaseNumber result = new BaseNumber(a.getBase(), false, &quot;0&quot;, a.getAdditionalValueMapping());</span>
-<span class="nc" id="L172">        byte base = a.getBase();</span>
-<span class="nc" id="L173">        int carry = 0;</span>
+<span class="nc" id="L183">        BaseNumber result = new BaseNumber(a.getBase(), false, &quot;0&quot;, a.getAdditionalValueMapping());</span>
+<span class="nc" id="L184">        byte base = a.getBase();</span>
+<span class="nc" id="L185">        int carry = 0;</span>
 
         // main addition
         int i;
-<span class="nc bnc" id="L177" title="All 2 branches missed.">        for (i = a.getValue().size() - 1; i &gt;= 0; i--) {</span>
-<span class="nc" id="L178">            int firstStep = carry * base + a.digitValueAt(i);</span>
-<span class="nc" id="L179">            carry = firstStep - firstStep / b.digitValueAt(0) * b.digitValueAt(0);</span>
-<span class="nc" id="L180">            char resultDigit = result.getAssociatedCharacter(firstStep / b.digitValueAt(0));</span>
-<span class="nc" id="L181">            result.addDigitAt(i, resultDigit);</span>
+<span class="nc bnc" id="L189" title="All 2 branches missed.">        for (i = a.getValue().size() - 1; i &gt;= 0; i--) {</span>
+<span class="nc" id="L190">            int firstStep = carry * base + a.digitValueAt(i);</span>
+<span class="nc" id="L191">            carry = firstStep - firstStep / b.digitValueAt(0) * b.digitValueAt(0);</span>
+<span class="nc" id="L192">            char resultDigit = result.getAssociatedCharacter(firstStep / b.digitValueAt(0));</span>
+<span class="nc" id="L193">            result.addDigitAt(i, resultDigit);</span>
         }
 
         // clean up trailing zeros
-<span class="nc bnc" id="L185" title="All 2 branches missed.">        for (int j = result.getValue().size() - 1; j &gt; 0; j--) {</span>
-<span class="nc bnc" id="L186" title="All 2 branches missed.">            if (result.getValue().get(j) != '0') { break; }</span>
-<span class="nc" id="L187">            result.removeLastDigit();</span>
+<span class="nc bnc" id="L197" title="All 2 branches missed.">        for (int j = result.getValue().size() - 1; j &gt; 0; j--) {</span>
+<span class="nc bnc" id="L198" title="All 2 branches missed.">            if (result.getValue().get(j) != '0') { break; }</span>
+<span class="nc" id="L199">            result.removeLastDigit();</span>
         }
 
-<span class="nc" id="L190">        BaseNumber[] resultArray = { </span>
+<span class="nc" id="L202">        BaseNumber[] resultArray = { </span>
             result, 
-<span class="nc" id="L192">            new BaseNumber(base, false, &quot;&quot; + result.getAssociatedCharacter(carry), result.getAdditionalValueMapping()) </span>
+<span class="nc" id="L204">            new BaseNumber(base, false, &quot;&quot; + result.getAssociatedCharacter(carry), result.getAdditionalValueMapping()) </span>
         };
-<span class="nc" id="L194">        return resultArray;</span>
+
+<span class="nc" id="L207">        System.out.println(a.toString() + &quot; / &quot; + b.toString() + &quot; == &quot; + resultArray[0].toString() + &quot; r &quot; + resultArray[1]);</span>
+        
+<span class="nc" id="L209">        return resultArray;</span>
     }
 
 }

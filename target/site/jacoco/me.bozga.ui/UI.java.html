@@ -268,14 +268,16 @@ import me.bozga.core.BaseNumberOperators;
 <span class="nc" id="L268">                baseConversionErrorLabel.setText(&quot;OK (Substitution)&quot;);</span>
             }
 
-<span class="nc" id="L271">            baseSecondNumberField.setText(r.toString()); </span>
+<span class="nc" id="L271">            System.out.println(&quot;Conversion: &quot; + n.toString() + &quot; =&gt; &quot; + r.toString());</span>
 
-<span class="nc" id="L273">        } catch (Exception ex) {</span>
-<span class="nc" id="L274">            String message = ex.getMessage();</span>
-<span class="nc bnc" id="L275" title="All 2 branches missed.">            if (message.length() &gt; 128) { message = message.substring(0, 128) + &quot; [...]&quot;; }</span>
-<span class="nc" id="L276">            baseConversionErrorLabel.setText(message);</span>
-<span class="nc" id="L277">        }</span>
-<span class="nc" id="L278">    }</span>
+<span class="nc" id="L273">            baseSecondNumberField.setText(r.toString()); </span>
+
+<span class="nc" id="L275">        } catch (Exception ex) {</span>
+<span class="nc" id="L276">            String message = ex.getMessage();</span>
+<span class="nc bnc" id="L277" title="All 2 branches missed.">            if (message.length() &gt; 128) { message = message.substring(0, 128) + &quot; [...]&quot;; }</span>
+<span class="nc" id="L278">            baseConversionErrorLabel.setText(message);</span>
+<span class="nc" id="L279">        }</span>
+<span class="nc" id="L280">    }</span>
     
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

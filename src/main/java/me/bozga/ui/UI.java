@@ -268,6 +268,8 @@ public class UI {
                 baseConversionErrorLabel.setText("OK (Substitution)");
             }
 
+            System.out.println("Conversion: " + n.toString() + " => " + r.toString());
+
             baseSecondNumberField.setText(r.toString()); 
 
         } catch (Exception ex) {
